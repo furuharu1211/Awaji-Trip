@@ -192,10 +192,10 @@ main:not(.home-main) { padding-top: calc(var(--header-h) + 54px); }
 }
 .hero-slide.is-active { opacity: 1; transform: scale(1); }
 .hero-slide:nth-child(1) { background-image: linear-gradient(rgba(54, 44, 36, 0.28), rgba(54, 44, 36, 0.28)), url('../images/hero/hero-01.jpg'); }
-.hero-slide:nth-child(2) { background-image: linear-gradient(120deg,#8f9a8e,#c8d0c5), url('../images/hero/hero-02.jpg'); }
-.hero-slide:nth-child(3) { background-image: linear-gradient(120deg,#9b7b68,#cda991), url('../images/hero/hero-03.jpg'); }
-.hero-slide:nth-child(4) { background-image: linear-gradient(120deg,#6f7a73,#aeb7ae), url('../images/hero/hero-04.jpg'); }
-.hero-slide:nth-child(5) { background-image: linear-gradient(120deg,#8f8173,#c8b7a4), url('../images/hero/hero-05.jpg'); }
+.hero-slide:nth-child(2) { background-image: linear-gradient(rgba(54, 44, 36, 0.28), rgba(54, 44, 36, 0.28)), url('../images/hero/hero-02.jpg'); }
+.hero-slide:nth-child(3) { background-image: linear-gradient(rgba(54, 44, 36, 0.28), rgba(54, 44, 36, 0.28)), url('../images/hero/hero-03.jpg'); }
+.hero-slide:nth-child(4) { background-image: linear-gradient(rgba(54, 44, 36, 0.28), rgba(54, 44, 36, 0.28)), url('../images/hero/hero-04.jpg'); }
+.hero-slide:nth-child(5) { background-image: linear-gradient(rgba(54, 44, 36, 0.28), rgba(54, 44, 36, 0.28)), url('../images/hero/hero-05.jpg'); }
 .hero-content {
   position: relative;
   z-index: 2;
