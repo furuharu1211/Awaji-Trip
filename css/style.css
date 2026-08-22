@@ -496,6 +496,8 @@ main:not(.home-main) {
   display: grid;
   place-items: center;
   color: #73675d;
+  overflow: hidden;
+  border-radius: var(--radius-sm);
 }
 
 .place-body {
