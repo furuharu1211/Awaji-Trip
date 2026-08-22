@@ -8,44 +8,211 @@
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-<header class="site-header">
-  <div class="header-inner">
-    <a class="brand" href="index.html" aria-label="HOMEへ戻る"><span class="brand-mark">淡</span><span>AWAJI FAMILY TRIP</span></a>
-    <nav class="desktop-nav" aria-label="メインナビゲーション"><a href="index.html">HOME</a><a href="schedule.html" aria-current="page">旅のしおり</a><a href="sightseeing.html">観光地</a><a href="hotel.html">宿泊施設</a><a href="belongings.html">持ち物</a><a href="members.html">参加メンバー</a><a href="gallery.html">思い出写真</a></nav>
-    <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="mobile-menu" aria-label="メニューを開く">☰</button>
-  </div>
-</header>
-<div class="mobile-menu" id="mobile-menu" aria-label="スマートフォンメニュー">
-  <div class="mobile-menu-panel"><nav><a href="index.html">HOME</a><a href="schedule.html" aria-current="page">旅のしおり</a><a href="sightseeing.html">観光地</a><a href="hotel.html">宿泊施設</a><a href="belongings.html">持ち物</a><a href="members.html">参加メンバー</a><a href="gallery.html">思い出写真</a></nav></div>
-</div>
-<main class="">
-<div class="container">
-  <section class="page-hero"><span class="eyebrow">SCHEDULE</span><h1 class="page-title">旅のしおり</h1><p class="page-lead">集合・出発・移動・観光・食事まで、旅行中に見返しやすい縦型タイムラインです。下記は仮データなので、そのまま文章を差し替えて使えます。</p></section>
-  <section class="section">
-    <div class="timeline-days">
-      <article class="day-block"><h2 class="day-title">1日目｜9月23日（水）</h2><div class="timeline">
-        <div class="timeline-item"><div class="timeline-time">09:00</div><div class="timeline-dot-wrap"><span class="timeline-dot"></span></div><div class="timeline-card"><h3>集合・自宅出発</h3><p>家族そろって出発。集合場所や出発前の連絡事項をここに記載します。</p><div class="timeline-meta"><span>🚗 車</span><span>所要：約2時間</span><span>住所：後から入力</span></div></div></div>
-        <div class="timeline-item"><div class="timeline-time">11:30</div><div class="timeline-dot-wrap"><span class="timeline-dot"></span></div><div class="timeline-card"><h3>昼食</h3><p>淡路島らしいランチを楽しむ予定。</p><div class="timeline-meta"><span>🚗 車</span><span>所要：約60分</span><span>予約情報：後から入力</span></div><div class="timeline-photo">写真を使う場合：<br>images/sightseeing/schedule-lunch.jpg</div></div></div>
-        <div class="timeline-item"><div class="timeline-time">14:00</div><div class="timeline-dot-wrap"><span class="timeline-dot"></span></div><div class="timeline-card"><h3>観光スポット</h3><p>今回行く観光地の内容をここに入力します。</p><div class="timeline-meta"><span>🚗 車</span><span>滞在：約90分</span><span>住所：後から入力</span></div><div class="button-row"><a class="btn secondary" href="#">公式サイト</a></div><div class="timeline-photo">写真を使う場合：<br>images/sightseeing/schedule-spot.jpg</div></div></div>
-        <div class="timeline-item"><div class="timeline-time">16:30</div><div class="timeline-dot-wrap"><span class="timeline-dot"></span></div><div class="timeline-card"><h3>淡路荘 チェックイン</h3><p>荷物を置いてひと休み。夕食やお風呂の時間を確認。</p><div class="timeline-meta"><span>🚗 車</span><span>宿泊：淡路荘</span></div><div class="button-row"><a class="btn" href="hotel.html">宿の詳細を見る</a></div></div></div>
-      </div></article>
-      <article class="day-block"><h2 class="day-title">2日目｜9月24日（木）</h2><div class="timeline">
-        <div class="timeline-item"><div class="timeline-time">08:00</div><div class="timeline-dot-wrap"><span class="timeline-dot"></span></div><div class="timeline-card"><h3>朝食</h3><p>宿で朝食。チェックアウト前の準備もここで確認できます。</p><div class="timeline-meta"><span>館内</span><span>所要：約60分</span></div></div></div>
-        <div class="timeline-item"><div class="timeline-time">10:00</div><div class="timeline-dot-wrap"><span class="timeline-dot"></span></div><div class="timeline-card"><h3>チェックアウト・出発</h3><p>忘れ物を確認して2日目の観光へ。</p><div class="timeline-meta"><span>🚗 車</span><span>次の目的地：後から入力</span></div></div></div>
-        <div class="timeline-item"><div class="timeline-time">13:00</div><div class="timeline-dot-wrap"><span class="timeline-dot"></span></div><div class="timeline-card"><h3>観光・昼食</h3><p>2日目のメイン予定を記載します。</p><div class="timeline-meta"><span>🚗 車</span><span>住所：後から入力</span></div><div class="timeline-photo">必要な予定だけ写真を追加できます</div></div></div>
-        <div class="timeline-item"><div class="timeline-time">17:00</div><div class="timeline-dot-wrap"><span class="timeline-dot"></span></div><div class="timeline-card"><h3>帰宅</h3><p>帰宅予定時刻や解散場所などを記載します。</p><div class="timeline-meta"><span>🚗 車</span><span>おつかれさまでした！</span></div></div></div>
-      </div></article>
+
+  <header class="site-header">
+    <div class="header-inner">
+      <a class="brand" href="index.html" aria-label="HOMEへ戻る">
+        <span class="brand-mark">淡</span>
+        <span>AWAJI FAMILY TRIP</span>
+      </a>
+
+      <nav class="desktop-nav" aria-label="メインナビゲーション">
+        <a href="index.html">HOME</a>
+        <a href="schedule.html" aria-current="page">旅のしおり</a>
+        <a href="sightseeing.html">観光地</a>
+        <a href="hotel.html">宿泊施設</a>
+        <a href="belongings.html">持ち物</a>
+        <a href="members.html">参加メンバー</a>
+        <a href="gallery.html">思い出写真</a>
+      </nav>
+
+      <button
+        class="menu-toggle"
+        type="button"
+        aria-expanded="false"
+        aria-controls="mobile-menu"
+        aria-label="メニューを開く"
+      >☰</button>
     </div>
-  </section>
-</div>
-</main>
-<footer class="site-footer">
-  <div class="container">
-    <div class="footer-title">AWAJI FAMILY TRIP 2026</div>
-    <div class="footer-date">2026.09.23 - 09.24</div>
-    <a class="footer-home" href="index.html">HOMEへ戻る</a>
+  </header>
+
+  <div class="mobile-menu" id="mobile-menu" aria-label="スマートフォンメニュー">
+    <div class="mobile-menu-panel">
+      <nav>
+        <a href="index.html">HOME</a>
+        <a href="schedule.html" aria-current="page">旅のしおり</a>
+        <a href="sightseeing.html">観光地</a>
+        <a href="hotel.html">宿泊施設</a>
+        <a href="belongings.html">持ち物</a>
+        <a href="members.html">参加メンバー</a>
+        <a href="gallery.html">思い出写真</a>
+      </nav>
+    </div>
   </div>
-</footer>
-<script src="js/main.js"></script>
+
+  <main>
+    <div class="container">
+      <section class="page-hero">
+        <span class="eyebrow">SCHEDULE</span>
+        <h1 class="page-title">旅のしおり</h1>
+        <p class="page-lead">集合・出発・移動・観光・食事まで、旅行のおおまかな流れが把握しやすいタイムラインです。</p>
+      </section>
+
+      <section class="section">
+        <div class="timeline-days">
+
+          <!-- 1日目 -->
+          <article class="day-block">
+            <h2 class="day-title">1日目｜9月23日（水）</h2>
+
+            <div class="timeline">
+              <div class="timeline-item">
+                <div class="timeline-time">09:00</div>
+                <div class="timeline-dot-wrap"><span class="timeline-dot"></span></div>
+                <div class="timeline-card">
+                  <h3>集合・自宅出発</h3>
+                  <p>家族そろって出発。集合場所や出発前の連絡事項をここに記載します。</p>
+                  <div class="timeline-meta">
+                    <span>🚗 車</span>
+                    <span>所要：約2時間</span>
+                    <span>住所：後から入力</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="timeline-item">
+                <div class="timeline-time">11:30</div>
+                <div class="timeline-dot-wrap"><span class="timeline-dot"></span></div>
+                <div class="timeline-card">
+                  <h3>昼食</h3>
+                  <p>淡路島らしいランチを楽しむ予定。</p>
+                  <div class="timeline-meta">
+                    <span>🚗 車</span>
+                    <span>所要：約60分</span>
+                    <span>予約情報：後から入力</span>
+                  </div>
+                  <div class="timeline-photo">
+                    <img
+                      src="images/sightseeing/schedule-01.jpg"
+                      alt="昼食の写真"
+                    >
+                  </div>
+                </div>
+              </div>
+
+              <div class="timeline-item">
+                <div class="timeline-time">14:00</div>
+                <div class="timeline-dot-wrap"><span class="timeline-dot"></span></div>
+                <div class="timeline-card">
+                  <h3>観光スポット</h3>
+                  <p>今回行く観光地の内容をここに入力します。</p>
+                  <div class="timeline-meta">
+                    <span>🚗 車</span>
+                    <span>滞在：約90分</span>
+                    <span>住所：後から入力</span>
+                  </div>
+                  <div class="button-row">
+                    <a class="btn secondary" href="#">公式サイト</a>
+                  </div>
+                  <div class="timeline-photo">
+                    <img
+                      src="images/sightseeing/schedule-02.jpg"
+                      alt="観光スポットの写真"
+                    >
+                  </div>
+                </div>
+              </div>
+
+              <div class="timeline-item">
+                <div class="timeline-time">16:30</div>
+                <div class="timeline-dot-wrap"><span class="timeline-dot"></span></div>
+                <div class="timeline-card">
+                  <h3>淡路荘 チェックイン</h3>
+                  <p>荷物を置いてひと休み。夕食やお風呂の時間を確認。</p>
+                  <div class="timeline-meta">
+                    <span>🚗 車</span>
+                    <span>宿泊：淡路荘</span>
+                  </div>
+                  <div class="button-row">
+                    <a class="btn" href="hotel.html">宿の詳細を見る</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </article>
+
+          <!-- 2日目 -->
+          <article class="day-block">
+            <h2 class="day-title">2日目｜9月24日（木）</h2>
+
+            <div class="timeline">
+              <div class="timeline-item">
+                <div class="timeline-time">08:00</div>
+                <div class="timeline-dot-wrap"><span class="timeline-dot"></span></div>
+                <div class="timeline-card">
+                  <h3>朝食</h3>
+                  <p>宿で朝食。チェックアウト前の準備もここで確認できます。</p>
+                  <div class="timeline-meta">
+                    <span>館内</span>
+                    <span>所要：約60分</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="timeline-item">
+                <div class="timeline-time">10:00</div>
+                <div class="timeline-dot-wrap"><span class="timeline-dot"></span></div>
+                <div class="timeline-card">
+                  <h3>チェックアウト・出発</h3>
+                  <p>忘れ物を確認して2日目の観光へ。</p>
+                  <div class="timeline-meta">
+                    <span>🚗 車</span>
+                    <span>次の目的地：後から入力</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="timeline-item">
+                <div class="timeline-time">13:00</div>
+                <div class="timeline-dot-wrap"><span class="timeline-dot"></span></div>
+                <div class="timeline-card">
+                  <h3>観光・昼食</h3>
+                  <p>2日目のメイン予定を記載します。</p>
+                  <div class="timeline-meta">
+                    <span>🚗 車</span>
+                    <span>住所：後から入力</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="timeline-item">
+                <div class="timeline-time">17:00</div>
+                <div class="timeline-dot-wrap"><span class="timeline-dot"></span></div>
+                <div class="timeline-card">
+                  <h3>帰宅</h3>
+                  <p>帰宅予定時刻や解散場所などを記載します。</p>
+                  <div class="timeline-meta">
+                    <span>🚗 車</span>
+                    <span>おつかれさまでした！</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </article>
+
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-title">AWAJI FAMILY TRIP 2026</div>
+      <div class="footer-date">2026.09.23 - 09.24</div>
+      <a class="footer-home" href="index.html">HOMEへ戻る</a>
+    </div>
+  </footer>
+
+  <script src="js/main.js"></script>
 </body>
 </html>
