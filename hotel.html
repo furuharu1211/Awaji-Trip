@@ -11,9 +11,17 @@
   <!-- hotel-01〜05 を同じ横長サイズで表示するための追加指定 -->
   <style>
     .hotel-gallery {
-      display: grid;
-      gap: 16px;
+      display: flex;
+      gap: 12px;
       margin-top: 20px;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      scrollbar-width: none;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .hotel-gallery::-webkit-scrollbar {
+      display: none;
     }
 
     .hotel-gallery-image {
@@ -22,6 +30,8 @@
       overflow: hidden;
       border-radius: var(--radius-sm);
       background: var(--surface-2);
+      flex: 0 0 92%;
+      scroll-snap-align: center;
     }
 
     .hotel-gallery-image img {
@@ -188,7 +198,6 @@
         <section class="hotel-section">
           <span class="eyebrow">05 AMENITIES</span>
           <h2 class="section-title">設備・アメニティ</h2>
-          <p>文字だけの表ではなく、シンプルなアイコンと名称で見やすく表示します。</p>
 
           <div class="amenity-grid">
             <div class="amenity">
@@ -230,7 +239,7 @@
             <div class="amenity">
               <img class="amenity-icon" src="images/hotel/amenity/amenity-icon-06.png" alt="" aria-hidden="true"
                 width="48" height="48">
-              <span>館内着(110円)</span>
+              <span>館内着（110円）</span>
             </div>
 
             <div class="amenity">
@@ -259,8 +268,13 @@
           </dl>
 
           <div class="button-row">
-            <a class="btn" href="https://maps.app.goo.gl/gwMKvRuWmVZ2uM9J7" target="_blank"
-              rel="noopener noreferrer">Google Mapsで見る</a>
+                <a class="btn secondary" href="https://maps.app.goo.gl/K1j4c8hr84fuqvgY7" target="_blank"
+                  rel="noopener noreferrer">Google Mapsを見る
+                </a>
+
+                <a class="btn secondary" href="https://maps.apple.com/place?address=%E3%80%92656-1501%2C+%E5%85%B5%E5%BA%AB%E7%9C%8C%E6%B7%A1%E8%B7%AF%E5%B8%82%2C+%E5%B0%BE%E5%B4%8E1421%2C+%E5%AF%8C%E5%A3%AB%E9%80%9A%E5%81%A5%E4%BF%9D%E7%B5%84%E5%90%88%E6%B7%A1%E8%B7%AF%E8%8D%98&coordinate=34.494303%2C134.865653&name=%E5%AF%8C%E5%A3%AB%E9%80%9A%E5%81%A5%E4%BF%9D%E7%B5%84%E5%90%88%E6%B7%A1%E8%B7%AF%E8%8D%98" target="_blank"
+                  rel="noopener noreferrer">Apple Mapsを見る
+                </a>
           </div>
         </section>
 
