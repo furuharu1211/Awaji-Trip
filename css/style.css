@@ -93,6 +93,13 @@ select {
   font-family: "Yu Mincho", "Hiragino Mincho ProN", serif;
 }
 
+.brand-mark img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
 /* 常にスマホ用ナビ */
 .desktop-nav {
   display: none;
@@ -452,7 +459,12 @@ main:not(.home-main) {
   margin: 10px 0 0;
 }
 
-.timeline-photo,
+.timeline-photo {
+  margin-top: 16px;
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+}
+
 .photo-placeholder {
   min-height: 180px;
   margin-top: 16px;
@@ -770,5 +782,36 @@ main:not(.home-main) {
     scroll-behavior: auto !important;
     transition-duration: .01ms !important;
     animation-duration: .01ms !important;
+  }
+}
+
+.trip-map-section {
+  margin-top: 48px;
+}
+
+.trip-map-section h2 {
+  margin-bottom: 8px;
+}
+
+.trip-map-section p {
+  margin-bottom: 20px;
+}
+
+.trip-map {
+  width: 100%;
+  border-radius: 20px;
+  overflow: hidden;
+}
+
+.trip-map iframe {
+  display: block;
+  width: 100%;
+  height: 500px;
+  border: 0;
+}
+
+@media (max-width: 768px) {
+  .trip-map iframe {
+    height: 400px;
   }
 }
