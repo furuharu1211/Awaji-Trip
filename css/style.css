@@ -225,7 +225,7 @@ main:not(.home-main) {
 /* HOME */
 .hero {
   width: min(100%, var(--mobile-content));
-  min-height: 100svh;
+  aspect-ratio: 5 / 8.5;
   margin-inline: auto;
   position: relative;
   overflow: hidden;
@@ -326,6 +326,16 @@ main:not(.home-main) {
   text-decoration: none;
   font-size: 1.5rem;
   letter-spacing: .15em;
+  display: inline-flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 6px;
+}
+
+.hero-scroll-icon {
+  width: 30px;
+  height: 30px;
+  object-fit: contain;
 }
 
 .home-links {
@@ -564,7 +574,7 @@ main:not(.home-main) {
   border: 1px solid var(--accent);
   background: var(--accent);
   color: #fff;
-  flex: 1 1 160px;
+  flex: 1 1 100%;
 }
 
 .btn.secondary {
