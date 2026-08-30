@@ -647,8 +647,6 @@ function renderQuizScreen() {
 
       </div>
 
-      ${perfectCelebration}
-
       <div class="quiz-question-list">
         ${questionsHtml}
       </div>
@@ -841,21 +839,34 @@ function renderResult(score) {
             quiz
         );
 
-    const perfectCelebration =
+    const scoreCat =
         score === 100
             ? `
-        <div
-          class="quiz-perfect-celebration"
-          aria-label="100点のお祝い"
-        >
-          <img
-            src="images/quiz/perfect-cat.png"
-            alt="100点をお祝いする猫"
-            class="quiz-perfect-cat"
-          >
-        </div>
-      `
-            : '';
+    <div
+      class="quiz-perfect-celebration"
+      aria-label="100点のお祝い"
+    >
+      <img
+        src="images/quiz/cat-100.png"
+        alt="100点をお祝いする猫"
+        class="quiz-perfect-cat"
+      >
+    </div>
+  `
+            : score <= 60
+                ? `
+    <div
+      class="quiz-perfect-celebration"
+      aria-label="もう少しで合格の猫"
+    >
+      <img
+        src="images/quiz/cat-0.png"
+        alt="もう少しで合格の猫"
+        class="quiz-perfect-cat"
+      >
+    </div>
+  `
+                : '';
 
     const questionsHtml =
         quiz.questions
@@ -1038,6 +1049,8 @@ function renderResult(score) {
         </p>
 
       </div>
+
+      ${scoreCat}
 
       <div class="quiz-question-list">
         ${questionsHtml}
