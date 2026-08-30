@@ -1385,3 +1385,53 @@ button.btn:disabled {
 
   max-width: 300px;
 }
+
+/* 100点 PERFECT 演出 */
+
+.quiz-perfect-celebration {
+  display: flex;
+  justify-content: center;
+  margin: -6px 0 26px;
+  overflow: hidden;
+}
+
+.quiz-perfect-cat {
+  display: block;
+  width: min(72%, 260px);
+  height: auto;
+
+  animation:
+    quiz-perfect-cat-in
+    .7s
+    cubic-bezier(.2, .8, .2, 1)
+    both;
+}
+
+@keyframes quiz-perfect-cat-in {
+  0% {
+    opacity: 0;
+    transform:
+      translateY(18px)
+      scale(.88);
+  }
+
+  65% {
+    opacity: 1;
+    transform:
+      translateY(-4px)
+      scale(1.04);
+  }
+
+  100% {
+    opacity: 1;
+    transform:
+      translateY(0)
+      scale(1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .quiz-perfect-cat {
+    animation: none;
+  }
+}
