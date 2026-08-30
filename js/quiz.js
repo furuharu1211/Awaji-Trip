@@ -423,10 +423,6 @@ function renderLockScreen() {
         2026.09.23 OPEN
       </p>
 
-      <p class="quiz-lock-note">
-        当日になったら、このページを開いたままでも
-        自動でクイズが表示されます。
-      </p>
     </section>
   `;
 }
@@ -843,30 +839,43 @@ function renderResult(score) {
         score === 100
             ? `
     <div
-      class="quiz-perfect-celebration"
-      aria-label="100点のお祝い"
-    >
-      <img
-        src="images/quiz/cat-100.png"
-        alt="100点をお祝いする猫"
-        class="quiz-perfect-cat"
-      >
-    </div>
-  `
-            : score <= 60
+          class="quiz-perfect-celebration"
+          aria-label="100点のお祝い"
+        >
+          <img
+            src="images/quiz/cat-100.png"
+            alt="100点をお祝いする猫"
+            class="quiz-perfect-cat"
+          >
+        </div>
+      `
+            : score === 80
                 ? `
-    <div
-      class="quiz-perfect-celebration"
-      aria-label="もう少しで合格の猫"
-    >
-      <img
-        src="images/quiz/cat-0.png"
-        alt="もう少しで合格の猫"
-        class="quiz-perfect-cat"
-      >
-    </div>
+        <div
+          class="quiz-perfect-celebration"
+          aria-label="合格した猫"
+        >
+          <img
+            src="images/quiz/cat-80.png"
+            alt="合格したときの猫"
+            class="quiz-perfect-cat"
+          >
+        </div>
+      `
+                : score <= 60
+                    ? `
+        <div
+          class="quiz-perfect-celebration"
+          aria-label="もう少しで合格の猫"
+        >
+          <img
+            src="images/quiz/cat-0.png"
+            alt="もう少しで合格の猫"
+            class="quiz-perfect-cat"
+          >
+        </div>
   `
-                : '';
+                    : '';
 
     const questionsHtml =
         quiz.questions
@@ -1087,6 +1096,8 @@ function renderResult(score) {
   `;
     if (score === 100) {
         playPerfectSound();
+    } else if (score <= 60) {
+        playFailureSound();
     }
 
 }
@@ -1095,6 +1106,20 @@ function playPerfectSound() {
     const audio =
         new Audio(
             'sounds/quiz-perfect.mp3'
+        );
+
+    audio.volume = 0.7;
+
+    audio.play().catch(() => {
+        // ブラウザ側で自動再生が制限された場合は
+        // 音を鳴らさず、そのまま結果を表示します。
+    });
+}
+
+function playFailureSound() {
+    const audio =
+        new Audio(
+            'sounds/quiz-failure.mp3'
         );
 
     audio.volume = 0.7;
