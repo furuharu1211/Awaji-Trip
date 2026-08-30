@@ -1108,7 +1108,7 @@ function playPerfectSound() {
             'sounds/quiz-perfect.mp3'
         );
 
-    audio.volume = 0.7;
+    audio.volume = 1.0;
 
     audio.play().catch(() => {
         // ブラウザ側で自動再生が制限された場合は
@@ -1122,7 +1122,7 @@ function playFailureSound() {
             'sounds/quiz-failure.mp3'
         );
 
-    audio.volume = 0.7;
+    audio.volume = 1.0;
 
     audio.play().catch(() => {
         // ブラウザ側で自動再生が制限された場合は
