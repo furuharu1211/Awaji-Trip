@@ -1,6 +1,6 @@
 'use strict';
 
-const QUIZ_OPEN_AT = Date.parse('2026-09-23T00:00:00+09:00');
+const QUIZ_OPEN_AT = Date.parse('2026-08-23T00:00:00+09:00');
 const STORAGE_PREFIX = 'awajiTripQuizBest_';
 
 const QUIZZES = {
