@@ -4,9 +4,9 @@
 //
 // 機能:
 // - 写真一覧取得
-// - 写真追加ボタンから写真ライブラリを開く
-// - 複数写真アップロード
-// - 20MB超の画像だけ条件付き圧縮
+// - 写真追加ボタンから写真選択
+// - 複数アップロード
+// - 20MB超の画像のみ圧縮
 // - 新しい写真を上に表示
 // - 削除モード
 // - 写真1枚選択
@@ -17,7 +17,6 @@
 
 // ------------------------------------------------------------
 // Cloudflare Worker URL
-// 末尾の「/」は自動削除
 // ------------------------------------------------------------
 
 const PHOTO_API_BASE =
@@ -29,7 +28,6 @@ const PHOTO_API_BASE =
 // 設定
 // ------------------------------------------------------------
 
-// 20MBを超える画像だけ圧縮
 const MAX_UPLOAD_SIZE =
   20 * 1024 * 1024;
 
@@ -77,7 +75,7 @@ const deleteSelectedButton =
   document.querySelector('#gallery-delete-selected-button');
 
 
-// 削除モーダル
+// 削除確認モーダル
 const deleteModal =
   document.querySelector('#gallery-delete-modal');
 
@@ -95,17 +93,21 @@ const deleteConfirmButton =
 // 状態
 // ============================================================
 
-let isDeleteMode = false;
+let isDeleteMode =
+  false;
 
-let selectedPhoto = null;
+let selectedPhoto =
+  null;
 
-let isUploading = false;
+let isUploading =
+  false;
 
-let isDeleting = false;
+let isDeleting =
+  false;
 
 
 // ============================================================
-// 共通関数
+// 共通
 // ============================================================
 
 function setStatus(
@@ -116,7 +118,8 @@ function setStatus(
 
   if (!element) return;
 
-  element.textContent = message;
+  element.textContent =
+    message;
 
   element.classList.toggle(
     'is-error',
@@ -125,25 +128,45 @@ function setStatus(
 }
 
 
-// ------------------------------------------------------------
-// 写真URL生成
-// ------------------------------------------------------------
+// ============================================================
+// 写真key
+// ============================================================
 
-function photoUrl(photo) {
+function photoKey(photo) {
 
-  // keyだけの文字列
-  if (typeof photo === 'string') {
+  const key =
+    typeof photo === 'string'
+      ? photo
+      : photo?.key;
 
-    return `${PHOTO_API_BASE}/photo/${
-      photo
-        .split('/')
-        .map(encodeURIComponent)
-        .join('/')
-    }`;
+
+  if (
+    typeof key !== 'string' ||
+    !key.startsWith('gallery/') ||
+    key === 'gallery/'
+  ) {
+
+    throw new Error(
+      'Invalid photo key'
+    );
   }
 
 
-  // Workerがurlを返した場合
+  return key;
+}
+
+
+// ============================================================
+// 写真URL
+// ============================================================
+
+function photoUrl(photo) {
+
+  const key =
+    photoKey(photo);
+
+
+  // API側がURLを返している場合
   if (
     photo &&
     typeof photo.url === 'string'
@@ -155,13 +178,13 @@ function photoUrl(photo) {
         PHOTO_API_BASE
       );
 
+
     const apiOrigin =
       new URL(
         PHOTO_API_BASE
       ).origin;
 
 
-    // Workerと異なるoriginは禁止
     if (
       url.origin !== apiOrigin
     ) {
@@ -176,58 +199,13 @@ function photoUrl(photo) {
   }
 
 
-  // keyを持つオブジェクト
-  if (
-    photo &&
-    typeof photo.key === 'string'
-  ) {
-
-    return `${PHOTO_API_BASE}/photo/${
-      photo.key
-        .split('/')
-        .map(encodeURIComponent)
-        .join('/')
-    }`;
-  }
-
-
-  throw new Error(
-    'Invalid photo entry'
-  );
-}
-
-
-// ------------------------------------------------------------
-// 写真key取得
-// ------------------------------------------------------------
-
-function photoKey(photo) {
-
-  if (
-    typeof photo === 'string'
-  ) {
-
-    return photo;
-  }
-
-
-  if (
-    photo &&
-    typeof photo.key === 'string'
-  ) {
-
-    return photo.key;
-  }
-
-
-  throw new Error(
-    'Invalid photo key'
-  );
+  // keyから生成
+  return `${PHOTO_API_BASE}/photo/${encodeURIComponent(key)}`;
 }
 
 
 // ============================================================
-// ギャラリー読み込み
+// 写真一覧取得
 // ============================================================
 
 async function loadPhotos() {
@@ -238,9 +216,11 @@ async function loadPhotos() {
   );
 
 
-  galleryGrid.hidden = true;
+  galleryGrid.hidden =
+    true;
 
-  galleryEmpty.hidden = true;
+  galleryEmpty.hidden =
+    true;
 
 
   try {
@@ -282,22 +262,26 @@ async function loadPhotos() {
     }
 
 
+    // --------------------------------------------------------
     // 新しい写真を上に表示
+    // --------------------------------------------------------
+
     photos =
       [...photos].sort(
         (a, b) => {
 
-          const dateA =
-            new Date(
-              a?.uploaded || 0
-            ).getTime();
+          const timeA =
+            Date.parse(
+              a?.uploaded || ''
+            ) || 0;
 
-          const dateB =
-            new Date(
-              b?.uploaded || 0
-            ).getTime();
+          const timeB =
+            Date.parse(
+              b?.uploaded || ''
+            ) || 0;
 
-          return dateB - dateA;
+
+          return timeB - timeA;
         }
       );
 
@@ -309,15 +293,11 @@ async function loadPhotos() {
     photos.forEach(
       (photo, index) => {
 
-        const figure =
+        fragment.append(
           createGalleryItem(
             photo,
             index
-          );
-
-
-        fragment.append(
-          figure
+          )
         );
       }
     );
@@ -375,7 +355,7 @@ async function loadPhotos() {
 
 
 // ============================================================
-// ギャラリー1枚分を作成
+// ギャラリー1枚分
 // ============================================================
 
 function createGalleryItem(
@@ -419,15 +399,12 @@ function createGalleryItem(
   img.decoding =
     'async';
 
-
-  // iOS Safariの長押し操作を
-  // 今後誤操作しにくくする
   img.draggable =
     false;
 
 
   // ----------------------------------------------------------
-  // 選択チェックマーク
+  // 選択チェック
   // ----------------------------------------------------------
 
   const check =
@@ -449,7 +426,7 @@ function createGalleryItem(
 
 
   // ----------------------------------------------------------
-  // 削除モード中のみ写真タップで選択
+  // 削除モード中のみタップで選択
   // ----------------------------------------------------------
 
   figure.addEventListener(
@@ -484,14 +461,10 @@ function createGalleryItem(
 
 // ============================================================
 // 画像圧縮
-// 20MBを超えた場合のみ処理
+// 20MBを超えたときだけ
 // ============================================================
 
 async function prepareImage(file) {
-
-  // ----------------------------------------------------------
-  // 20MB以下は元画像そのまま
-  // ----------------------------------------------------------
 
   if (
     file.size <=
@@ -501,21 +474,6 @@ async function prepareImage(file) {
     return file;
   }
 
-
-  console.log(
-    'Large image detected:',
-    file.name,
-    `${(
-      file.size /
-      1024 /
-      1024
-    ).toFixed(1)}MB`
-  );
-
-
-  // ----------------------------------------------------------
-  // 画像をブラウザで読み込み
-  // ----------------------------------------------------------
 
   let bitmap;
 
@@ -549,10 +507,6 @@ async function prepareImage(file) {
   let height =
     bitmap.height;
 
-
-  // ----------------------------------------------------------
-  // 極端に大きな画像はまず長辺を5000px程度へ
-  // ----------------------------------------------------------
 
   const INITIAL_MAX_DIMENSION =
     5000;
@@ -610,10 +564,6 @@ async function prepareImage(file) {
   }
 
 
-  // ----------------------------------------------------------
-  // 保存形式
-  // ----------------------------------------------------------
-
   let outputType =
     file.type;
 
@@ -625,7 +575,6 @@ async function prepareImage(file) {
   ];
 
 
-  // Canvas非対応形式の場合はJPEGへ
   if (
     !supportedTypes.includes(
       outputType
@@ -644,10 +593,6 @@ async function prepareImage(file) {
   let resultBlob =
     null;
 
-
-  // ----------------------------------------------------------
-  // 少しずつ縮小して20MB以下を目指す
-  // ----------------------------------------------------------
 
   for (
     let attempt = 0;
@@ -703,7 +648,6 @@ async function prepareImage(file) {
     }
 
 
-    // 20MB以下
     if (
       resultBlob.size <=
       MAX_UPLOAD_SIZE
@@ -713,7 +657,6 @@ async function prepareImage(file) {
     }
 
 
-    // 画像サイズを少し縮小
     width =
       Math.round(
         width * 0.85
@@ -725,7 +668,6 @@ async function prepareImage(file) {
       );
 
 
-    // JPEG / WebPの場合は品質も少し下げる
     if (
       outputType ===
         'image/jpeg' ||
@@ -745,17 +687,10 @@ async function prepareImage(file) {
   bitmap.close();
 
 
-  if (!resultBlob) {
-
-    throw new Error(
-      `${file.name} の圧縮に失敗しました。`
-    );
-  }
-
-
   if (
+    !resultBlob ||
     resultBlob.size >
-    MAX_UPLOAD_SIZE
+      MAX_UPLOAD_SIZE
   ) {
 
     throw new Error(
@@ -763,10 +698,6 @@ async function prepareImage(file) {
     );
   }
 
-
-  // ----------------------------------------------------------
-  // ファイル名
-  // ----------------------------------------------------------
 
   let newName =
     file.name;
@@ -791,38 +722,17 @@ async function prepareImage(file) {
   }
 
 
-  const compressedFile =
-    new File(
-      [resultBlob],
-      newName,
-      {
-        type:
-          outputType,
+  return new File(
+    [resultBlob],
+    newName,
+    {
+      type:
+        outputType,
 
-        lastModified:
-          file.lastModified
-      }
-    );
-
-
-  console.log(
-    'Image compressed:',
-    file.name,
-    `${(
-      file.size /
-      1024 /
-      1024
-    ).toFixed(1)}MB`,
-    '→',
-    `${(
-      compressedFile.size /
-      1024 /
-      1024
-    ).toFixed(1)}MB`
+      lastModified:
+        file.lastModified
+    }
   );
-
-
-  return compressedFile;
 }
 
 
@@ -883,19 +793,19 @@ async function uploadPhoto(file) {
 
     try {
 
-      const errorData =
+      const data =
         await response.json();
 
 
       detail =
-        errorData.error ||
-        errorData.detail ||
+        data.error ||
+        data.detail ||
         '';
 
     }
 
     catch {
-      // JSONでない場合は無視
+      // JSONではない場合は無視
     }
 
 
@@ -911,12 +821,10 @@ async function uploadPhoto(file) {
 
 
 // ============================================================
-// 複数写真アップロード
+// 複数アップロード
 // ============================================================
 
-async function uploadPhotos(
-  files
-) {
+async function uploadPhotos(files) {
 
   if (
     isUploading ||
@@ -939,7 +847,6 @@ async function uploadPhotos(
     true;
 
 
-  // 削除モード中なら一旦終了
   if (
     isDeleteMode
   ) {
@@ -962,10 +869,6 @@ async function uploadPhotos(
 
 
   try {
-
-    // --------------------------------------------------------
-    // 1枚ずつ順番にアップロード
-    // --------------------------------------------------------
 
     for (
       const file of files
@@ -996,10 +899,6 @@ async function uploadPhotos(
     }
 
 
-    // --------------------------------------------------------
-    // 結果表示
-    // --------------------------------------------------------
-
     if (
       successCount > 0 &&
       failureCount === 0
@@ -1013,8 +912,7 @@ async function uploadPhotos(
     }
 
     else if (
-      successCount > 0 &&
-      failureCount > 0
+      successCount > 0
     ) {
 
       setStatus(
@@ -1064,69 +962,59 @@ async function uploadPhotos(
 
 
 // ============================================================
-// 写真追加ボタン
+// 写真追加イベント
 // ============================================================
 
-if (
-  photoSelectButton &&
-  fileInput
-) {
+photoSelectButton?.addEventListener(
+  'click',
+  () => {
 
-  photoSelectButton.addEventListener(
-    'click',
-    () => {
+    if (
+      isUploading
+    ) {
 
-      if (
-        isUploading
-      ) {
-
-        return;
-      }
+      return;
+    }
 
 
-      setStatus(
-        uploadStatus,
-        ''
+    setStatus(
+      uploadStatus,
+      ''
+    );
+
+
+    fileInput.click();
+  }
+);
+
+
+fileInput?.addEventListener(
+  'change',
+  async () => {
+
+    const files =
+      Array.from(
+        fileInput.files || []
       );
 
 
-      fileInput.click();
+    if (
+      files.length === 0
+    ) {
+
+      return;
     }
-  );
 
 
-  // ----------------------------------------------------------
-  // 写真選択後、自動アップロード
-  // ----------------------------------------------------------
-
-  fileInput.addEventListener(
-    'change',
-    async () => {
-
-      const files =
-        Array.from(
-          fileInput.files || []
-        );
-
-
-      if (
-        files.length === 0
-      ) {
-
-        return;
-      }
-
-
-      await uploadPhotos(
-        files
-      );
-    }
-  );
-}
+    await uploadPhotos(
+      files
+    );
+  }
+);
 
 
 // ============================================================
-// 削除モード
+// 削除モード開始
 // ============================================================
 
 function enterDeleteMode() {
@@ -1147,47 +1035,28 @@ function enterDeleteMode() {
   clearSelectedPhoto();
 
 
-  if (
-    deleteModeBar
-  ) {
+  deleteModeBar.hidden =
+    false;
 
-    deleteModeBar.hidden =
-      false;
-  }
+  deleteAction.hidden =
+    true;
 
+  deleteModeButton.disabled =
+    true;
 
-  if (
-    deleteAction
-  ) {
-
-    deleteAction.hidden =
-      true;
-  }
+  photoSelectButton.disabled =
+    true;
 
 
-  if (
-    deleteModeButton
-  ) {
-
-    deleteModeButton.disabled =
-      true;
-  }
-
-
-  if (
-    photoSelectButton
-  ) {
-
-    photoSelectButton.disabled =
-      true;
-  }
-
-
-  galleryGrid?.classList.add(
+  galleryGrid.classList.add(
     'is-delete-mode'
   );
 }
 
+
+// ============================================================
+// 削除モード終了
+// ============================================================
 
 function exitDeleteMode() {
 
@@ -1198,43 +1067,20 @@ function exitDeleteMode() {
   clearSelectedPhoto();
 
 
-  if (
-    deleteModeBar
-  ) {
+  deleteModeBar.hidden =
+    true;
 
-    deleteModeBar.hidden =
-      true;
-  }
+  deleteAction.hidden =
+    true;
 
+  deleteModeButton.disabled =
+    false;
 
-  if (
-    deleteAction
-  ) {
-
-    deleteAction.hidden =
-      true;
-  }
+  photoSelectButton.disabled =
+    false;
 
 
-  if (
-    deleteModeButton
-  ) {
-
-    deleteModeButton.disabled =
-      false;
-  }
-
-
-  if (
-    photoSelectButton
-  ) {
-
-    photoSelectButton.disabled =
-      false;
-  }
-
-
-  galleryGrid?.classList.remove(
+  galleryGrid.classList.remove(
     'is-delete-mode'
   );
 }
@@ -1257,6 +1103,18 @@ function selectPhoto(
   }
 
 
+  // 同じ写真をもう一度押した場合は解除
+  if (
+    selectedPhoto?.figure ===
+    figure
+  ) {
+
+    clearSelectedPhoto();
+
+    return;
+  }
+
+
   clearSelectedPhoto();
 
 
@@ -1274,19 +1132,14 @@ function selectPhoto(
   );
 
 
-  if (
-    deleteAction
-  ) {
-
-    deleteAction.hidden =
-      false;
-  }
+  deleteAction.hidden =
+    false;
 }
 
 
-// ------------------------------------------------------------
+// ============================================================
 // 選択解除
-// ------------------------------------------------------------
+// ============================================================
 
 function clearSelectedPhoto() {
 
@@ -1338,7 +1191,6 @@ function openDeleteModal() {
   );
 
 
-  // モーダル表示後に削除ボタンへフォーカス
   requestAnimationFrame(
     () => {
 
@@ -1369,23 +1221,14 @@ function closeDeleteModal() {
 
 
 // ============================================================
-// 写真削除API
+// DELETE API
 // ============================================================
 
-async function deletePhoto(
-  key
-) {
-
-  const encodedKey =
-    key
-      .split('/')
-      .map(encodeURIComponent)
-      .join('/');
-
+async function deletePhoto(key) {
 
   const response =
     await fetch(
-      `${PHOTO_API_BASE}/photo/${encodedKey}`,
+      `${PHOTO_API_BASE}/photo/${encodeURIComponent(key)}`,
       {
         method:
           'DELETE'
@@ -1403,13 +1246,13 @@ async function deletePhoto(
 
     try {
 
-      const errorData =
+      const data =
         await response.json();
 
 
       detail =
-        errorData.error ||
-        errorData.detail ||
+        data.error ||
+        data.detail ||
         '';
 
     }
@@ -1453,22 +1296,11 @@ async function confirmDelete() {
     selectedPhoto.key;
 
 
-  if (
-    deleteConfirmButton
-  ) {
+  deleteConfirmButton.disabled =
+    true;
 
-    deleteConfirmButton.disabled =
-      true;
-  }
-
-
-  if (
-    deleteCancelButton
-  ) {
-
-    deleteCancelButton.disabled =
-      true;
-  }
+  deleteCancelButton.disabled =
+    true;
 
 
   try {
@@ -1511,22 +1343,11 @@ async function confirmDelete() {
 
   finally {
 
-    if (
-      deleteConfirmButton
-    ) {
+    deleteConfirmButton.disabled =
+      false;
 
-      deleteConfirmButton.disabled =
-        false;
-    }
-
-
-    if (
-      deleteCancelButton
-    ) {
-
-      deleteCancelButton.disabled =
-        false;
-    }
+    deleteCancelButton.disabled =
+      false;
 
 
     isDeleting =
@@ -1575,9 +1396,9 @@ deleteConfirmButton?.addEventListener(
 );
 
 
-// ------------------------------------------------------------
-// Escキーでモーダルを閉じる
-// ------------------------------------------------------------
+// ============================================================
+// Escキー
+// ============================================================
 
 document.addEventListener(
   'keydown',
