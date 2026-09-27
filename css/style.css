@@ -719,18 +719,96 @@ main:not(.home-main) {
   color: var(--muted);
 }
 
-/* 思い出写真 */
+/* =========================================================
+   思い出写真
+========================================================= */
+
+
+/* ---------------------------------------------------------
+   写真0枚時
+--------------------------------------------------------- */
+
 .gallery-empty {
   text-align: center;
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: var(--radius-lg);
-  padding: clamp(46px,8vw,96px) 24px;
+  padding: clamp(46px, 8vw, 96px) 24px;
 }
 
 .gallery-empty .icon {
   font-size: 2.4rem;
 }
+
+
+/* ---------------------------------------------------------
+   写真追加エリア
+--------------------------------------------------------- */
+
+.gallery-upload {
+  padding: 24px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  box-shadow: 0 12px 28px rgba(76, 62, 50, .05);
+}
+
+.gallery-upload .section-title {
+  font-size: 1.6rem;
+}
+
+.gallery-upload p {
+  margin: 8px 0 18px;
+  color: var(--muted);
+}
+
+
+/* ---------------------------------------------------------
+   写真追加・削除ボタン
+--------------------------------------------------------- */
+
+.gallery-actions {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 10px;
+  margin-top: 18px;
+}
+
+.gallery-actions .btn {
+  width: 100%;
+  min-height: 50px;
+  cursor: pointer;
+}
+
+.gallery-actions .btn:disabled {
+  cursor: not-allowed;
+  opacity: .45;
+  filter: grayscale(.2);
+}
+
+
+/* ---------------------------------------------------------
+   ステータス表示
+--------------------------------------------------------- */
+
+.gallery-status {
+  margin: 16px 0;
+  color: var(--muted);
+  font-size: .92rem;
+}
+
+.gallery-status.is-error {
+  color: #a03f36;
+}
+
+.gallery-upload .gallery-status {
+  margin-bottom: 0;
+}
+
+
+/* ---------------------------------------------------------
+   ギャラリー
+--------------------------------------------------------- */
 
 .gallery-grid {
   columns: 2 150px;
@@ -739,56 +817,363 @@ main:not(.home-main) {
 }
 
 .gallery-item {
+  position: relative;
   break-inside: avoid;
   margin: 0 0 14px;
+
+  border: 3px solid transparent;
+  border-radius: 17px;
+
+  overflow: hidden;
+
+  transition:
+    opacity .18s ease,
+    border-color .18s ease,
+    transform .18s ease,
+    box-shadow .18s ease;
 }
 
 .gallery-item img {
+  display: block;
   width: 100%;
   border-radius: 14px;
   background: #ddd;
+
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-user-drag: none;
 }
 
-/* 思い出写真のアップロード */
-.gallery-upload {
-  padding: 24px;
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-lg);
-}
 
-.gallery-upload .section-title { font-size: 1.6rem; }
-.gallery-upload p { margin: 8px 0 18px; color: var(--muted); }
-.gallery-upload form { display: grid; gap: 12px; }
-.gallery-file-label { font-weight: 800; }
-.gallery-upload input[type="file"] {
-  width: 100%;
-  min-width: 0;
-  padding: 12px;
-  border: 1px solid var(--border);
-  border-radius: var(--radius-sm);
-  background: var(--bg);
-  font-size: .9rem;
-}
-.gallery-upload input[type="file"]::file-selector-button {
-  margin-right: 10px;
-  padding: 9px 12px;
-  border: 0;
-  border-radius: 999px;
-  background: var(--surface-2);
-  color: var(--accent-dark);
-  font-weight: 800;
+/* ---------------------------------------------------------
+   削除モード
+--------------------------------------------------------- */
+
+.gallery-grid.is-delete-mode .gallery-item {
   cursor: pointer;
 }
-.gallery-upload .gallery-file-name {
-  margin: 0;
-  overflow-wrap: anywhere;
-  font-size: .85rem;
+
+.gallery-grid.is-delete-mode .gallery-item:active {
+  transform: scale(.98);
 }
-.gallery-status { margin: 16px 0; color: var(--muted); }
-.gallery-status.is-error { color: #a03f36; }
-.gallery-upload .gallery-status { margin-bottom: 0; }
-.gallery-grid[hidden], .gallery-empty[hidden] { display: none; }
+
+
+/* ---------------------------------------------------------
+   選択された写真
+--------------------------------------------------------- */
+
+.gallery-item.is-selected {
+  border-color: var(--accent-dark);
+  box-shadow:
+    0 0 0 3px rgba(113, 88, 72, .16),
+    0 12px 30px rgba(76, 62, 50, .16);
+}
+
+.gallery-item.is-selected img {
+  opacity: .52;
+}
+
+
+/* ---------------------------------------------------------
+   選択チェックマーク
+--------------------------------------------------------- */
+
+.gallery-select-check {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+
+  width: 34px;
+  height: 34px;
+
+  display: grid;
+  place-items: center;
+
+  border-radius: 50%;
+
+  background: var(--accent-dark);
+  color: #fff;
+
+  font-size: 1rem;
+  font-weight: 900;
+
+  box-shadow:
+    0 5px 16px rgba(49, 43, 38, .24);
+
+  opacity: 0;
+  transform: scale(.8);
+
+  pointer-events: none;
+
+  transition:
+    opacity .18s ease,
+    transform .18s ease;
+}
+
+.gallery-item.is-selected .gallery-select-check {
+  opacity: 1;
+  transform: scale(1);
+}
+
+
+/* ---------------------------------------------------------
+   削除モード案内バー
+--------------------------------------------------------- */
+
+.gallery-delete-mode-bar {
+  margin-top: 20px;
+  padding: 18px;
+
+  display: grid;
+  gap: 14px;
+
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+
+  box-shadow: 0 10px 24px rgba(76, 62, 50, .05);
+}
+
+.gallery-delete-mode-copy strong {
+  display: block;
+  margin-bottom: 2px;
+
+  color: var(--accent-dark);
+
+  font-size: 1rem;
+}
+
+.gallery-delete-mode-copy p {
+  margin: 0;
+  color: var(--muted);
+  font-size: .9rem;
+}
+
+.gallery-delete-mode-bar .btn {
+  width: 100%;
+  min-height: 46px;
+}
+
+
+/* ---------------------------------------------------------
+   写真選択後の削除アクション
+--------------------------------------------------------- */
+
+.gallery-delete-action {
+  position: sticky;
+  bottom: 14px;
+  z-index: 30;
+
+  margin-top: 18px;
+  padding: 10px;
+
+  background: rgba(255, 253, 248, .94);
+  backdrop-filter: blur(12px);
+
+  border: 1px solid var(--border);
+  border-radius: 999px;
+
+  box-shadow:
+    0 12px 32px rgba(76, 62, 50, .16);
+}
+
+.gallery-delete-button {
+  width: 100%;
+  min-height: 48px;
+
+  border: 0;
+  border-radius: 999px;
+
+  background: #a85b52;
+  color: #fff;
+
+  font-weight: 800;
+
+  cursor: pointer;
+}
+
+.gallery-delete-button:hover,
+.gallery-delete-button:focus-visible {
+  filter: brightness(.96);
+
+  outline:
+    3px solid
+    rgba(168, 91, 82, .18);
+
+  outline-offset: 2px;
+}
+
+
+/* ---------------------------------------------------------
+   削除確認モーダル
+--------------------------------------------------------- */
+
+.gallery-modal {
+  position: fixed;
+  inset: 0;
+
+  z-index: 3000;
+
+  display: grid;
+  place-items: center;
+
+  padding: 22px;
+}
+
+.gallery-modal[hidden] {
+  display: none;
+}
+
+.gallery-modal-overlay {
+  position: absolute;
+  inset: 0;
+
+  background: rgba(49, 43, 38, .48);
+  backdrop-filter: blur(4px);
+}
+
+.gallery-modal-card {
+  position: relative;
+  z-index: 1;
+
+  width: min(100%, 360px);
+
+  padding: 26px;
+
+  background: var(--surface);
+
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+
+  box-shadow:
+    0 24px 70px
+    rgba(49, 43, 38, .26);
+
+  text-align: center;
+}
+
+.gallery-modal-card .section-title {
+  margin-bottom: 10px;
+  font-size: 1.45rem;
+}
+
+.gallery-modal-card p {
+  margin: 0;
+
+  color: var(--muted);
+  font-size: .92rem;
+}
+
+
+/* ---------------------------------------------------------
+   モーダルボタン
+--------------------------------------------------------- */
+
+.gallery-modal-actions {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 10px;
+
+  margin-top: 24px;
+}
+
+.gallery-modal-actions .btn,
+.gallery-delete-confirm-button {
+  width: 100%;
+  min-height: 48px;
+}
+
+.gallery-delete-confirm-button {
+  border: 0;
+  border-radius: 999px;
+
+  background: #a85b52;
+  color: #fff;
+
+  font-weight: 800;
+
+  cursor: pointer;
+}
+
+.gallery-delete-confirm-button:hover,
+.gallery-delete-confirm-button:focus-visible {
+  filter: brightness(.96);
+
+  outline:
+    3px solid
+    rgba(168, 91, 82, .18);
+
+  outline-offset: 2px;
+}
+
+.gallery-delete-confirm-button:disabled,
+.gallery-modal-actions .btn:disabled {
+  cursor: not-allowed;
+  opacity: .45;
+}
+
+
+/* ---------------------------------------------------------
+   モーダル表示中は背景スクロール停止
+--------------------------------------------------------- */
+
+body.gallery-modal-open {
+  overflow: hidden;
+}
+
+
+/* ---------------------------------------------------------
+   hidden
+--------------------------------------------------------- */
+
+.gallery-grid[hidden],
+.gallery-empty[hidden],
+.gallery-delete-mode-bar[hidden],
+.gallery-delete-action[hidden] {
+  display: none;
+}
+
+
+/* ---------------------------------------------------------
+   PCなど少し広い画面
+--------------------------------------------------------- */
+
+@media (min-width: 540px) {
+
+  .gallery-actions {
+    grid-template-columns:
+      repeat(2, minmax(0, 1fr));
+  }
+
+  .gallery-delete-mode-bar {
+    grid-template-columns:
+      1fr auto;
+
+    align-items: center;
+  }
+
+  .gallery-delete-mode-bar .btn {
+    width: auto;
+  }
+
+  .gallery-modal-actions {
+    grid-template-columns:
+      repeat(2, minmax(0, 1fr));
+  }
+}
+
+
+/* ---------------------------------------------------------
+   動きを減らす設定
+--------------------------------------------------------- */
+
+@media (prefers-reduced-motion: reduce) {
+
+  .gallery-item,
+  .gallery-select-check {
+    transition: none;
+  }
+}
 
 /* Footer */
 .site-footer {
