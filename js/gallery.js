@@ -8,6 +8,8 @@
 // - 複数アップロード
 // - 20MB超の画像のみ圧縮
 // - 新しい写真を上に表示
+// - 正方形ギャラリー
+// - 写真タップで拡大表示
 // - 削除モード
 // - 写真1枚選択
 // - 削除確認モーダル
@@ -56,6 +58,20 @@ const galleryEmpty =
 
 const galleryGrid =
   document.querySelector('#gallery-grid');
+
+
+// 写真拡大ビューア
+const galleryViewer =
+  document.querySelector('#gallery-viewer');
+
+const galleryViewerImage =
+  document.querySelector('#gallery-viewer-image');
+
+const galleryViewerOverlay =
+  document.querySelector('#gallery-viewer-overlay');
+
+const galleryViewerClose =
+  document.querySelector('#gallery-viewer-close');
 
 
 // 削除モード
@@ -166,7 +182,6 @@ function photoUrl(photo) {
     photoKey(photo);
 
 
-  // API側がURLを返している場合
   if (
     photo &&
     typeof photo.url === 'string'
@@ -199,7 +214,6 @@ function photoUrl(photo) {
   }
 
 
-  // keyから生成
   return `${PHOTO_API_BASE}/photo/${encodeURIComponent(key)}`;
 }
 
@@ -261,10 +275,6 @@ async function loadPhotos() {
       );
     }
 
-
-    // --------------------------------------------------------
-    // 新しい写真を上に表示
-    // --------------------------------------------------------
 
     photos =
       [...photos].sort(
@@ -403,10 +413,6 @@ function createGalleryItem(
     false;
 
 
-  // ----------------------------------------------------------
-  // 選択チェック
-  // ----------------------------------------------------------
-
   const check =
     document.createElement(
       'span'
@@ -425,25 +431,28 @@ function createGalleryItem(
   );
 
 
-  // ----------------------------------------------------------
-  // 削除モード中のみタップで選択
-  // ----------------------------------------------------------
-
   figure.addEventListener(
     'click',
     () => {
 
+      // 削除モード中
       if (
-        !isDeleteMode
+        isDeleteMode
       ) {
+
+        selectPhoto(
+          photo,
+          figure
+        );
 
         return;
       }
 
 
-      selectPhoto(
-        photo,
-        figure
+      // 通常モード
+      openGalleryViewer(
+        img.src,
+        img.alt
       );
     }
   );
@@ -460,8 +469,76 @@ function createGalleryItem(
 
 
 // ============================================================
+// 写真拡大ビューア
+// ============================================================
+
+function openGalleryViewer(
+  src,
+  alt
+) {
+
+  if (
+    !galleryViewer ||
+    !galleryViewerImage
+  ) {
+
+    return;
+  }
+
+
+  galleryViewerImage.src =
+    src;
+
+  galleryViewerImage.alt =
+    alt || '拡大した思い出写真';
+
+
+  galleryViewer.hidden =
+    false;
+
+
+  document.body.classList.add(
+    'gallery-viewer-open'
+  );
+
+
+  requestAnimationFrame(
+    () => {
+
+      galleryViewerClose?.focus();
+    }
+  );
+}
+
+
+function closeGalleryViewer() {
+
+  if (
+    !galleryViewer ||
+    !galleryViewerImage
+  ) {
+
+    return;
+  }
+
+
+  galleryViewer.hidden =
+    true;
+
+
+  galleryViewerImage.src =
+    '';
+
+
+  document.body.classList.remove(
+    'gallery-viewer-open'
+  );
+}
+
+
+// ============================================================
 // 画像圧縮
-// 20MBを超えたときだけ
+// 20MB超のみ
 // ============================================================
 
 async function prepareImage(file) {
@@ -521,11 +598,8 @@ async function prepareImage(file) {
 
     const scale =
       Math.min(
-        INITIAL_MAX_DIMENSION /
-          width,
-
-        INITIAL_MAX_DIMENSION /
-          height
+        INITIAL_MAX_DIMENSION / width,
+        INITIAL_MAX_DIMENSION / height
       );
 
 
@@ -669,10 +743,8 @@ async function prepareImage(file) {
 
 
     if (
-      outputType ===
-        'image/jpeg' ||
-      outputType ===
-        'image/webp'
+      outputType === 'image/jpeg' ||
+      outputType === 'image/webp'
     ) {
 
       quality =
@@ -704,10 +776,8 @@ async function prepareImage(file) {
 
 
   if (
-    outputType ===
-      'image/jpeg' &&
-    file.type !==
-      'image/jpeg'
+    outputType === 'image/jpeg' &&
+    file.type !== 'image/jpeg'
   ) {
 
     const baseName =
@@ -805,7 +875,7 @@ async function uploadPhoto(file) {
     }
 
     catch {
-      // JSONではない場合は無視
+      // JSON以外は無視
     }
 
 
@@ -1014,7 +1084,7 @@ fileInput?.addEventListener(
 
 
 // ============================================================
-// 削除モード開始
+// 削除モード
 // ============================================================
 
 function enterDeleteMode() {
@@ -1053,10 +1123,6 @@ function enterDeleteMode() {
   );
 }
 
-
-// ============================================================
-// 削除モード終了
-// ============================================================
 
 function exitDeleteMode() {
 
@@ -1103,7 +1169,6 @@ function selectPhoto(
   }
 
 
-  // 同じ写真をもう一度押した場合は解除
   if (
     selectedPhoto?.figure ===
     figure
@@ -1137,10 +1202,6 @@ function selectPhoto(
 }
 
 
-// ============================================================
-// 選択解除
-// ============================================================
-
 function clearSelectedPhoto() {
 
   if (
@@ -1168,7 +1229,7 @@ function clearSelectedPhoto() {
 
 
 // ============================================================
-// 削除モーダル
+// 削除確認モーダル
 // ============================================================
 
 function openDeleteModal() {
@@ -1258,7 +1319,7 @@ async function deletePhoto(key) {
     }
 
     catch {
-      // JSONでない場合は無視
+      // JSON以外は無視
     }
 
 
@@ -1357,9 +1418,23 @@ async function confirmDelete() {
 
 
 // ============================================================
-// 削除関連イベント
+// イベント
 // ============================================================
 
+// ビューア
+galleryViewerClose?.addEventListener(
+  'click',
+  closeGalleryViewer
+);
+
+
+galleryViewerOverlay?.addEventListener(
+  'click',
+  closeGalleryViewer
+);
+
+
+// 削除
 deleteModeButton?.addEventListener(
   'click',
   enterDeleteMode
@@ -1397,7 +1472,7 @@ deleteConfirmButton?.addEventListener(
 
 
 // ============================================================
-// Escキー
+// Escapeキー
 // ============================================================
 
 document.addEventListener(
@@ -1407,6 +1482,17 @@ document.addEventListener(
     if (
       event.key !== 'Escape'
     ) {
+
+      return;
+    }
+
+
+    if (
+      galleryViewer &&
+      !galleryViewer.hidden
+    ) {
+
+      closeGalleryViewer();
 
       return;
     }

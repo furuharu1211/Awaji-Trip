@@ -56,33 +56,13 @@
         aria-label="メインナビゲーション"
       >
 
-        <a href="index.html">
-          HOME
-        </a>
-
-        <a href="schedule.html">
-          旅のしおり
-        </a>
-
-        <a href="sightseeing.html">
-          観光地
-        </a>
-
-        <a href="quiz.html">
-          観光地クイズ
-        </a>
-
-        <a href="hotel.html">
-          宿泊施設
-        </a>
-
-        <a href="belongings.html">
-          持ち物
-        </a>
-
-        <a href="members.html">
-          参加メンバー
-        </a>
+        <a href="index.html">HOME</a>
+        <a href="schedule.html">旅のしおり</a>
+        <a href="sightseeing.html">観光地</a>
+        <a href="quiz.html">観光地クイズ</a>
+        <a href="hotel.html">宿泊施設</a>
+        <a href="belongings.html">持ち物</a>
+        <a href="members.html">参加メンバー</a>
 
         <a
           href="gallery.html"
@@ -123,33 +103,13 @@
 
       <nav>
 
-        <a href="index.html">
-          HOME
-        </a>
-
-        <a href="schedule.html">
-          旅のしおり
-        </a>
-
-        <a href="sightseeing.html">
-          観光地
-        </a>
-
-        <a href="quiz.html">
-          観光地クイズ
-        </a>
-
-        <a href="hotel.html">
-          宿泊施設
-        </a>
-
-        <a href="belongings.html">
-          持ち物
-        </a>
-
-        <a href="members.html">
-          参加メンバー
-        </a>
+        <a href="index.html">HOME</a>
+        <a href="schedule.html">旅のしおり</a>
+        <a href="sightseeing.html">観光地</a>
+        <a href="quiz.html">観光地クイズ</a>
+        <a href="hotel.html">宿泊施設</a>
+        <a href="belongings.html">持ち物</a>
+        <a href="members.html">参加メンバー</a>
 
         <a
           href="gallery.html"
@@ -224,11 +184,6 @@
           </p>
 
 
-          <!--
-            実際のファイルinputは非表示。
-            「写真を追加」ボタンからJSで開く。
-          -->
-
           <input
             id="gallery-file"
             name="file"
@@ -238,10 +193,6 @@
             hidden
           >
 
-
-          <!-- ==============================================
-               通常操作
-          ============================================== -->
 
           <div class="gallery-actions">
 
@@ -420,6 +371,49 @@
     </div>
 
   </footer>
+
+
+
+  <!-- ======================================================
+       写真拡大ビューア
+  ====================================================== -->
+
+  <div
+    id="gallery-viewer"
+    class="gallery-viewer"
+    hidden
+    role="dialog"
+    aria-modal="true"
+    aria-label="写真を拡大表示"
+  >
+
+    <div
+      id="gallery-viewer-overlay"
+      class="gallery-viewer-overlay"
+    ></div>
+
+
+    <button
+      type="button"
+      id="gallery-viewer-close"
+      class="gallery-viewer-close"
+      aria-label="写真を閉じる"
+    >
+      ×
+    </button>
+
+
+    <div class="gallery-viewer-content">
+
+      <img
+        id="gallery-viewer-image"
+        src=""
+        alt="拡大した思い出写真"
+      >
+
+    </div>
+
+  </div>
 
 
 

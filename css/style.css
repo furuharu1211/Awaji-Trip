@@ -747,10 +747,15 @@ main:not(.home-main) {
 
 .gallery-upload {
   padding: 24px;
+
   background: var(--surface);
+
   border: 1px solid var(--border);
   border-radius: var(--radius-lg);
-  box-shadow: 0 12px 28px rgba(76, 62, 50, .05);
+
+  box-shadow:
+    0 12px 28px
+    rgba(76, 62, 50, .05);
 }
 
 .gallery-upload .section-title {
@@ -769,20 +774,26 @@ main:not(.home-main) {
 
 .gallery-actions {
   display: grid;
+
   grid-template-columns: 1fr;
+
   gap: 10px;
+
   margin-top: 18px;
 }
 
 .gallery-actions .btn {
   width: 100%;
   min-height: 50px;
+
   cursor: pointer;
 }
 
 .gallery-actions .btn:disabled {
   cursor: not-allowed;
+
   opacity: .45;
+
   filter: grayscale(.2);
 }
 
@@ -793,7 +804,9 @@ main:not(.home-main) {
 
 .gallery-status {
   margin: 16px 0;
+
   color: var(--muted);
+
   font-size: .92rem;
 }
 
@@ -811,48 +824,82 @@ main:not(.home-main) {
 ========================================================= */
 
 .gallery-grid {
-  columns: 2 150px;
-  column-gap: 14px;
+  display: grid;
+
+  grid-template-columns:
+    repeat(2, minmax(0, 1fr));
+
+  gap: 0;
+
+  width: 100%;
+
   margin-top: 34px;
+
+  overflow: hidden;
+
+  border-radius: 14px;
+
+  background: var(--surface);
 }
+
+
+/* ---------------------------------------------------------
+   写真1枚分
+--------------------------------------------------------- */
 
 .gallery-item {
   position: relative;
 
-  break-inside: avoid;
-
   width: 100%;
-  margin: 0 0 14px;
 
-  border: 3px solid transparent;
-  border-radius: 17px;
+  aspect-ratio: 1 / 1;
+
+  margin: 0;
 
   overflow: hidden;
 
-  background: transparent;
+  background: #ddd;
+
+  cursor: pointer;
+
+  -webkit-tap-highlight-color: transparent;
 
   transition:
-    border-color .18s ease,
-    box-shadow .18s ease,
-    transform .18s ease;
+    transform .18s ease,
+    box-shadow .18s ease;
 }
+
+
+/* ---------------------------------------------------------
+   正方形の中に写真を敷き詰める
+--------------------------------------------------------- */
 
 .gallery-item img {
   display: block;
 
   width: 100%;
-  height: auto;
+  height: 100%;
 
-  border-radius: 14px;
+  object-fit: cover;
+
+  border-radius: 0;
 
   background: #ddd;
 
   user-select: none;
+
   -webkit-user-select: none;
   -webkit-user-drag: none;
 
   transition:
-    opacity .18s ease;
+    opacity .18s ease,
+    transform .2s ease;
+}
+
+
+/* タップしたときの軽い反応 */
+.gallery-item:active {
+  transform: scale(.985);
 }
 
 
@@ -862,10 +909,8 @@ main:not(.home-main) {
 
 .gallery-grid.is-delete-mode .gallery-item {
   cursor: pointer;
-}
 
-.gallery-grid.is-delete-mode .gallery-item:active {
-  transform: scale(.98);
+  touch-action: manipulation;
 }
 
 
@@ -879,6 +924,7 @@ main:not(.home-main) {
   padding: 18px;
 
   display: grid;
+
   gap: 14px;
 
   background: var(--surface-2);
@@ -911,29 +957,30 @@ main:not(.home-main) {
 
 .gallery-delete-mode-bar .btn {
   width: 100%;
+
   min-height: 46px;
 }
 
 
 /* =========================================================
-   選択中の写真
+   削除対象として選択した写真
 ========================================================= */
 
 .gallery-item.is-selected {
-  border-color: var(--accent-dark);
+  z-index: 2;
 
   box-shadow:
-    0 0 0 3px rgba(113, 88, 72, .16),
-    0 12px 30px rgba(76, 62, 50, .16);
+    inset 0 0 0 4px
+    var(--accent-dark);
 }
 
 .gallery-item.is-selected img {
-  opacity: .5;
+  opacity: .52;
 }
 
 
 /* ---------------------------------------------------------
-   選択チェックマーク
+   選択チェック
 --------------------------------------------------------- */
 
 .gallery-select-check {
@@ -946,11 +993,13 @@ main:not(.home-main) {
   height: 34px;
 
   display: grid;
+
   place-items: center;
 
   border-radius: 50%;
 
   background: var(--accent-dark);
+
   color: #fff;
 
   font-size: 1rem;
@@ -959,7 +1008,7 @@ main:not(.home-main) {
 
   box-shadow:
     0 5px 16px
-    rgba(49, 43, 38, .24);
+    rgba(49, 43, 38, .28);
 
   opacity: 0;
 
@@ -974,6 +1023,7 @@ main:not(.home-main) {
 
 .gallery-item.is-selected .gallery-select-check {
   opacity: 1;
+
   transform: scale(1);
 }
 
@@ -996,10 +1046,16 @@ main:not(.home-main) {
   background:
     rgba(255, 253, 248, .94);
 
-  -webkit-backdrop-filter: blur(12px);
-  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter:
+    blur(12px);
 
-  border: 1px solid var(--border);
+  backdrop-filter:
+    blur(12px);
+
+  border:
+    1px solid
+    var(--border);
+
   border-radius: 999px;
 
   box-shadow:
@@ -1015,9 +1071,11 @@ main:not(.home-main) {
   padding: 11px 18px;
 
   border: 0;
+
   border-radius: 999px;
 
   background: #a85b52;
+
   color: #fff;
 
   font-weight: 800;
@@ -1038,7 +1096,174 @@ main:not(.home-main) {
 
 .gallery-delete-button:disabled {
   cursor: not-allowed;
+
   opacity: .45;
+}
+
+
+/* =========================================================
+   写真拡大ビューア
+========================================================= */
+
+.gallery-viewer {
+  position: fixed;
+
+  inset: 0;
+
+  z-index: 4000;
+
+  display: grid;
+
+  place-items: center;
+
+  padding:
+    max(20px, env(safe-area-inset-top))
+    max(14px, env(safe-area-inset-right))
+    max(20px, env(safe-area-inset-bottom))
+    max(14px, env(safe-area-inset-left));
+}
+
+
+/* hidden時は完全非表示 */
+.gallery-viewer[hidden] {
+  display: none;
+}
+
+
+/* ---------------------------------------------------------
+   拡大ビューア背景
+--------------------------------------------------------- */
+
+.gallery-viewer-overlay {
+  position: absolute;
+
+  inset: 0;
+
+  background:
+    rgba(20, 18, 16, .94);
+}
+
+
+/* ---------------------------------------------------------
+   拡大写真領域
+--------------------------------------------------------- */
+
+.gallery-viewer-content {
+  position: relative;
+
+  z-index: 1;
+
+  width: 100%;
+  height: 100%;
+
+  display: grid;
+
+  place-items: center;
+
+  pointer-events: none;
+}
+
+
+/* ---------------------------------------------------------
+   拡大写真
+
+   一覧では cover で正方形トリミングするが、
+   ここでは contain にして写真全体を表示する。
+--------------------------------------------------------- */
+
+.gallery-viewer-content img {
+  display: block;
+
+  max-width: 100%;
+
+  max-height:
+    calc(100vh - 40px);
+
+  max-height:
+    calc(100dvh - 40px);
+
+  width: auto;
+  height: auto;
+
+  object-fit: contain;
+
+  user-select: none;
+
+  -webkit-user-select: none;
+  -webkit-user-drag: none;
+
+  pointer-events: auto;
+}
+
+
+/* ---------------------------------------------------------
+   拡大ビューアを閉じるボタン
+--------------------------------------------------------- */
+
+.gallery-viewer-close {
+  position: absolute;
+
+  top:
+    max(
+      16px,
+      env(safe-area-inset-top)
+    );
+
+  right:
+    max(
+      16px,
+      env(safe-area-inset-right)
+    );
+
+  z-index: 3;
+
+  width: 46px;
+  height: 46px;
+
+  display: grid;
+
+  place-items: center;
+
+  padding: 0;
+
+  border: 0;
+
+  border-radius: 50%;
+
+  background:
+    rgba(255, 255, 255, .92);
+
+  color: #3f3a35;
+
+  font-size: 2rem;
+
+  font-weight: 400;
+
+  line-height: 1;
+
+  cursor: pointer;
+
+  box-shadow:
+    0 5px 20px
+    rgba(0, 0, 0, .18);
+}
+
+.gallery-viewer-close:hover,
+.gallery-viewer-close:focus-visible {
+  outline:
+    3px solid
+    rgba(255, 255, 255, .28);
+
+  outline-offset: 3px;
+}
+
+
+/* ---------------------------------------------------------
+   写真拡大中は背景をスクロールさせない
+--------------------------------------------------------- */
+
+body.gallery-viewer-open {
+  overflow: hidden;
 }
 
 
@@ -1051,23 +1276,24 @@ main:not(.home-main) {
 
   inset: 0;
 
-  z-index: 3000;
+  z-index: 5000;
 
   display: grid;
+
   place-items: center;
 
   padding: 22px;
 }
 
 
-/* hidden があるときは必ず非表示 */
+/* hidden時は完全非表示 */
 .gallery-modal[hidden] {
   display: none;
 }
 
 
 /* ---------------------------------------------------------
-   モーダル背景
+   削除モーダル背景
 --------------------------------------------------------- */
 
 .gallery-modal-overlay {
@@ -1078,13 +1304,16 @@ main:not(.home-main) {
   background:
     rgba(49, 43, 38, .48);
 
-  -webkit-backdrop-filter: blur(4px);
-  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter:
+    blur(4px);
+
+  backdrop-filter:
+    blur(4px);
 }
 
 
 /* ---------------------------------------------------------
-   モーダルカード
+   削除モーダル本体
 --------------------------------------------------------- */
 
 .gallery-modal-card {
@@ -1092,14 +1321,20 @@ main:not(.home-main) {
 
   z-index: 1;
 
-  width: min(100%, 360px);
+  width:
+    min(100%, 360px);
 
   padding: 26px;
 
-  background: var(--surface);
+  background:
+    var(--surface);
 
-  border: 1px solid var(--border);
-  border-radius: var(--radius-lg);
+  border:
+    1px solid
+    var(--border);
+
+  border-radius:
+    var(--radius-lg);
 
   box-shadow:
     0 24px 70px
@@ -1112,6 +1347,7 @@ main:not(.home-main) {
   margin-bottom: 10px;
 
   font-size: 1.45rem;
+
   line-height: 1.5;
 }
 
@@ -1125,7 +1361,7 @@ main:not(.home-main) {
 
 
 /* ---------------------------------------------------------
-   モーダル操作ボタン
+   削除モーダル操作
 --------------------------------------------------------- */
 
 .gallery-modal-actions {
@@ -1141,18 +1377,21 @@ main:not(.home-main) {
 .gallery-modal-actions .btn,
 .gallery-delete-confirm-button {
   width: 100%;
+
   min-height: 48px;
 }
 
 
-/* 削除確定 */
+/* 削除確定ボタン */
 .gallery-delete-confirm-button {
   padding: 11px 18px;
 
   border: 0;
+
   border-radius: 999px;
 
   background: #a85b52;
+
   color: #fff;
 
   font-weight: 800;
@@ -1176,12 +1415,13 @@ main:not(.home-main) {
 .gallery-delete-confirm-button:disabled,
 .gallery-modal-actions .btn:disabled {
   cursor: not-allowed;
+
   opacity: .45;
 }
 
 
 /* ---------------------------------------------------------
-   モーダル表示中
+   削除モーダル表示中はスクロール停止
 --------------------------------------------------------- */
 
 body.gallery-modal-open {
@@ -1202,28 +1442,19 @@ body.gallery-modal-open {
 
 
 /* =========================================================
-   スマホでのタップ操作対策
-========================================================= */
-
-.gallery-item {
-  -webkit-tap-highlight-color: transparent;
-}
-
-.gallery-grid.is-delete-mode .gallery-item {
-  touch-action: manipulation;
-}
-
-
-/* =========================================================
-   画面が少し広い場合
+   少し広い画面
 ========================================================= */
 
 @media (min-width: 540px) {
 
   .gallery-actions {
     grid-template-columns:
-      repeat(2, minmax(0, 1fr));
+      repeat(
+        2,
+        minmax(0, 1fr)
+      );
   }
+
 
   .gallery-delete-mode-bar {
     grid-template-columns:
@@ -1232,13 +1463,18 @@ body.gallery-modal-open {
     align-items: center;
   }
 
+
   .gallery-delete-mode-bar .btn {
     width: auto;
   }
 
+
   .gallery-modal-actions {
     grid-template-columns:
-      repeat(2, minmax(0, 1fr));
+      repeat(
+        2,
+        minmax(0, 1fr)
+      );
   }
 }
 
