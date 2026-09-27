@@ -725,7 +725,7 @@ main:not(.home-main) {
 
 
 /* ---------------------------------------------------------
-   写真0枚時
+   写真が0枚のとき
 --------------------------------------------------------- */
 
 .gallery-empty {
@@ -757,14 +757,14 @@ main:not(.home-main) {
   font-size: 1.6rem;
 }
 
-.gallery-upload p {
+.gallery-upload > p {
   margin: 8px 0 18px;
   color: var(--muted);
 }
 
 
 /* ---------------------------------------------------------
-   写真追加・削除ボタン
+   写真追加 / 削除ボタン
 --------------------------------------------------------- */
 
 .gallery-actions {
@@ -788,7 +788,7 @@ main:not(.home-main) {
 
 
 /* ---------------------------------------------------------
-   ステータス表示
+   アップロード / 読み込み状態
 --------------------------------------------------------- */
 
 .gallery-status {
@@ -806,9 +806,9 @@ main:not(.home-main) {
 }
 
 
-/* ---------------------------------------------------------
-   ギャラリー
---------------------------------------------------------- */
+/* =========================================================
+   ギャラリー本体
+========================================================= */
 
 .gallery-grid {
   columns: 2 150px;
@@ -818,7 +818,10 @@ main:not(.home-main) {
 
 .gallery-item {
   position: relative;
+
   break-inside: avoid;
+
+  width: 100%;
   margin: 0 0 14px;
 
   border: 3px solid transparent;
@@ -826,28 +829,36 @@ main:not(.home-main) {
 
   overflow: hidden;
 
+  background: transparent;
+
   transition:
-    opacity .18s ease,
     border-color .18s ease,
-    transform .18s ease,
-    box-shadow .18s ease;
+    box-shadow .18s ease,
+    transform .18s ease;
 }
 
 .gallery-item img {
   display: block;
+
   width: 100%;
+  height: auto;
+
   border-radius: 14px;
+
   background: #ddd;
 
   user-select: none;
   -webkit-user-select: none;
   -webkit-user-drag: none;
+
+  transition:
+    opacity .18s ease;
 }
 
 
-/* ---------------------------------------------------------
+/* =========================================================
    削除モード
---------------------------------------------------------- */
+========================================================= */
 
 .gallery-grid.is-delete-mode .gallery-item {
   cursor: pointer;
@@ -859,18 +870,65 @@ main:not(.home-main) {
 
 
 /* ---------------------------------------------------------
-   選択された写真
+   削除モード中の案内
 --------------------------------------------------------- */
+
+.gallery-delete-mode-bar {
+  margin-top: 20px;
+
+  padding: 18px;
+
+  display: grid;
+  gap: 14px;
+
+  background: var(--surface-2);
+
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+
+  box-shadow:
+    0 10px 24px
+    rgba(76, 62, 50, .05);
+}
+
+.gallery-delete-mode-copy strong {
+  display: block;
+
+  margin-bottom: 2px;
+
+  color: var(--accent-dark);
+
+  font-size: 1rem;
+}
+
+.gallery-delete-mode-copy p {
+  margin: 0;
+
+  color: var(--muted);
+
+  font-size: .9rem;
+}
+
+.gallery-delete-mode-bar .btn {
+  width: 100%;
+  min-height: 46px;
+}
+
+
+/* =========================================================
+   選択中の写真
+========================================================= */
 
 .gallery-item.is-selected {
   border-color: var(--accent-dark);
+
   box-shadow:
     0 0 0 3px rgba(113, 88, 72, .16),
     0 12px 30px rgba(76, 62, 50, .16);
 }
 
 .gallery-item.is-selected img {
-  opacity: .52;
+  opacity: .5;
 }
 
 
@@ -880,6 +938,7 @@ main:not(.home-main) {
 
 .gallery-select-check {
   position: absolute;
+
   top: 10px;
   right: 10px;
 
@@ -896,11 +955,14 @@ main:not(.home-main) {
 
   font-size: 1rem;
   font-weight: 900;
+  line-height: 1;
 
   box-shadow:
-    0 5px 16px rgba(49, 43, 38, .24);
+    0 5px 16px
+    rgba(49, 43, 38, .24);
 
   opacity: 0;
+
   transform: scale(.8);
 
   pointer-events: none;
@@ -916,70 +978,41 @@ main:not(.home-main) {
 }
 
 
-/* ---------------------------------------------------------
-   削除モード案内バー
---------------------------------------------------------- */
-
-.gallery-delete-mode-bar {
-  margin-top: 20px;
-  padding: 18px;
-
-  display: grid;
-  gap: 14px;
-
-  background: var(--surface-2);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-md);
-
-  box-shadow: 0 10px 24px rgba(76, 62, 50, .05);
-}
-
-.gallery-delete-mode-copy strong {
-  display: block;
-  margin-bottom: 2px;
-
-  color: var(--accent-dark);
-
-  font-size: 1rem;
-}
-
-.gallery-delete-mode-copy p {
-  margin: 0;
-  color: var(--muted);
-  font-size: .9rem;
-}
-
-.gallery-delete-mode-bar .btn {
-  width: 100%;
-  min-height: 46px;
-}
-
-
-/* ---------------------------------------------------------
-   写真選択後の削除アクション
---------------------------------------------------------- */
+/* =========================================================
+   「この写真を削除」ボタン
+========================================================= */
 
 .gallery-delete-action {
   position: sticky;
+
   bottom: 14px;
+
   z-index: 30;
 
   margin-top: 18px;
+
   padding: 10px;
 
-  background: rgba(255, 253, 248, .94);
+  background:
+    rgba(255, 253, 248, .94);
+
+  -webkit-backdrop-filter: blur(12px);
   backdrop-filter: blur(12px);
 
   border: 1px solid var(--border);
   border-radius: 999px;
 
   box-shadow:
-    0 12px 32px rgba(76, 62, 50, .16);
+    0 12px 32px
+    rgba(76, 62, 50, .16);
 }
 
 .gallery-delete-button {
   width: 100%;
+
   min-height: 48px;
+
+  padding: 11px 18px;
 
   border: 0;
   border-radius: 999px;
@@ -1003,13 +1036,19 @@ main:not(.home-main) {
   outline-offset: 2px;
 }
 
+.gallery-delete-button:disabled {
+  cursor: not-allowed;
+  opacity: .45;
+}
 
-/* ---------------------------------------------------------
+
+/* =========================================================
    削除確認モーダル
---------------------------------------------------------- */
+========================================================= */
 
 .gallery-modal {
   position: fixed;
+
   inset: 0;
 
   z-index: 3000;
@@ -1020,20 +1059,37 @@ main:not(.home-main) {
   padding: 22px;
 }
 
+
+/* hidden があるときは必ず非表示 */
 .gallery-modal[hidden] {
   display: none;
 }
 
+
+/* ---------------------------------------------------------
+   モーダル背景
+--------------------------------------------------------- */
+
 .gallery-modal-overlay {
   position: absolute;
+
   inset: 0;
 
-  background: rgba(49, 43, 38, .48);
+  background:
+    rgba(49, 43, 38, .48);
+
+  -webkit-backdrop-filter: blur(4px);
   backdrop-filter: blur(4px);
 }
 
+
+/* ---------------------------------------------------------
+   モーダルカード
+--------------------------------------------------------- */
+
 .gallery-modal-card {
   position: relative;
+
   z-index: 1;
 
   width: min(100%, 360px);
@@ -1054,24 +1110,29 @@ main:not(.home-main) {
 
 .gallery-modal-card .section-title {
   margin-bottom: 10px;
+
   font-size: 1.45rem;
+  line-height: 1.5;
 }
 
 .gallery-modal-card p {
   margin: 0;
 
   color: var(--muted);
+
   font-size: .92rem;
 }
 
 
 /* ---------------------------------------------------------
-   モーダルボタン
+   モーダル操作ボタン
 --------------------------------------------------------- */
 
 .gallery-modal-actions {
   display: grid;
+
   grid-template-columns: 1fr;
+
   gap: 10px;
 
   margin-top: 24px;
@@ -1083,7 +1144,11 @@ main:not(.home-main) {
   min-height: 48px;
 }
 
+
+/* 削除確定 */
 .gallery-delete-confirm-button {
+  padding: 11px 18px;
+
   border: 0;
   border-radius: 999px;
 
@@ -1106,6 +1171,8 @@ main:not(.home-main) {
   outline-offset: 2px;
 }
 
+
+/* 処理中 */
 .gallery-delete-confirm-button:disabled,
 .gallery-modal-actions .btn:disabled {
   cursor: not-allowed;
@@ -1114,7 +1181,7 @@ main:not(.home-main) {
 
 
 /* ---------------------------------------------------------
-   モーダル表示中は背景スクロール停止
+   モーダル表示中
 --------------------------------------------------------- */
 
 body.gallery-modal-open {
@@ -1122,9 +1189,9 @@ body.gallery-modal-open {
 }
 
 
-/* ---------------------------------------------------------
-   hidden
---------------------------------------------------------- */
+/* =========================================================
+   hidden制御
+========================================================= */
 
 .gallery-grid[hidden],
 .gallery-empty[hidden],
@@ -1134,9 +1201,22 @@ body.gallery-modal-open {
 }
 
 
-/* ---------------------------------------------------------
-   PCなど少し広い画面
---------------------------------------------------------- */
+/* =========================================================
+   スマホでのタップ操作対策
+========================================================= */
+
+.gallery-item {
+  -webkit-tap-highlight-color: transparent;
+}
+
+.gallery-grid.is-delete-mode .gallery-item {
+  touch-action: manipulation;
+}
+
+
+/* =========================================================
+   画面が少し広い場合
+========================================================= */
 
 @media (min-width: 540px) {
 
@@ -1163,83 +1243,19 @@ body.gallery-modal-open {
 }
 
 
-/* ---------------------------------------------------------
-   動きを減らす設定
---------------------------------------------------------- */
+/* =========================================================
+   モーション軽減
+========================================================= */
 
 @media (prefers-reduced-motion: reduce) {
 
   .gallery-item,
+  .gallery-item img,
   .gallery-select-check {
     transition: none;
   }
 }
 
-/* 写真の選択と削除 */
-.gallery-hint { margin: 26px 0 -14px; color: var(--muted); font-size: .85rem; }
-.gallery-item { position: relative; cursor: pointer; touch-action: pan-y; }
-.gallery-item.is-selected {
-  outline: 3px solid var(--accent-dark);
-  outline-offset: 2px;
-  border-radius: 14px;
-  opacity: .7;
-}
-.gallery-item.is-selected::after {
-  content: "✓";
-  position: absolute;
-  top: 8px;
-  right: 8px;
-  display: grid;
-  place-items: center;
-  width: 30px;
-  height: 30px;
-  border-radius: 50%;
-  background: var(--accent-dark);
-  color: #fff;
-  font-weight: 900;
-}
-.gallery-item:focus-visible { outline: 3px solid var(--accent-dark); border-radius: 14px; }
-.gallery-selection-actions {
-  position: sticky;
-  bottom: 12px;
-  z-index: 30;
-  display: grid;
-  gap: 8px;
-  margin-top: 18px;
-  padding: 16px;
-  border: 1px solid var(--border);
-  border-radius: var(--radius-md);
-  background: var(--surface);
-  box-shadow: var(--shadow);
-}
-.gallery-selection-actions[hidden], .gallery-modal[hidden] { display: none; }
-.gallery-selection-actions .btn { width: 100%; }
-.gallery-selection-actions span { font-weight: 800; }
-.gallery-modal {
-  position: fixed;
-  inset: 0;
-  z-index: 1100;
-  display: grid;
-  place-items: center;
-  padding: 20px;
-}
-.gallery-modal-backdrop { position: absolute; inset: 0; background: rgba(49,43,38,.55); }
-.gallery-modal-dialog {
-  position: relative;
-  width: min(100%, 390px);
-  padding: 26px;
-  border-radius: var(--radius-lg);
-  background: var(--surface);
-  box-shadow: var(--shadow);
-}
-.gallery-modal-dialog h2 { margin: 0 0 8px; font-size: 1.4rem; }
-.gallery-modal-dialog p { margin: 0 0 20px; }
-.gallery-modal-actions { display: grid; gap: 10px; }
-.gallery-modal-actions .btn { width: 100%; cursor: pointer; }
-.gallery-delete-danger { background: #a4473c; border-color: #a4473c; }
-.gallery-modal-dialog .gallery-status { margin: 12px 0 0; }
-.gallery-upload #gallery-upload-button { width: 100%; }
-.gallery-upload .gallery-file-name { font-size: .85rem; }
 /* Footer */
 .site-footer {
   margin-top: 80px;
