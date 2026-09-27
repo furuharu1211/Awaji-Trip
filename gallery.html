@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="淡路荘へ出かける家族旅行の情報共有サイトです。">
   <title>思い出写真 | AWAJI FAMILY TRIP 2026</title>
-  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/style.css?v=20260927-gallery2">
 </head>
 
 <body>
@@ -41,7 +41,7 @@
           <p>スマートフォンやPCから写真を追加できます。</p>
           <form id="gallery-upload-form">
             <label for="gallery-file" class="gallery-file-label">写真を選択</label>
-            <input id="gallery-file" name="file" type="file" accept="image/*" required>
+            <input id="gallery-file" name="file" type="file" accept="image/*" required aria-describedby="gallery-file-name">
             <p id="gallery-file-name" class="gallery-file-name">写真が選択されていません</p>
             <button class="btn" type="submit" id="gallery-upload-button">写真を追加</button>
           </form>
