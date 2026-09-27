@@ -749,6 +749,47 @@ main:not(.home-main) {
   background: #ddd;
 }
 
+/* 思い出写真のアップロード */
+.gallery-upload {
+  padding: 24px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+}
+
+.gallery-upload .section-title { font-size: 1.6rem; }
+.gallery-upload p { margin: 8px 0 18px; color: var(--muted); }
+.gallery-upload form { display: grid; gap: 12px; }
+.gallery-file-label { font-weight: 800; }
+.gallery-upload input[type="file"] {
+  width: 100%;
+  min-width: 0;
+  padding: 12px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--bg);
+  font-size: .9rem;
+}
+.gallery-upload input[type="file"]::file-selector-button {
+  margin-right: 10px;
+  padding: 9px 12px;
+  border: 0;
+  border-radius: 999px;
+  background: var(--surface-2);
+  color: var(--accent-dark);
+  font-weight: 800;
+  cursor: pointer;
+}
+.gallery-upload .gallery-file-name {
+  margin: 0;
+  overflow-wrap: anywhere;
+  font-size: .85rem;
+}
+.gallery-status { margin: 16px 0; color: var(--muted); }
+.gallery-status.is-error { color: #a03f36; }
+.gallery-upload .gallery-status { margin-bottom: 0; }
+.gallery-grid[hidden], .gallery-empty[hidden] { display: none; }
+
 /* Footer */
 .site-footer {
   margin-top: 80px;
