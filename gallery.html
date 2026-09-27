@@ -33,20 +33,27 @@
     <div class="container">
       <section class="page-hero"><span class="eyebrow">MEMORIES</span>
         <h1 class="page-title">思い出写真</h1>
-        <p class="page-lead">旅行が終わったら写真を追加します。</p>
+        <p class="page-lead">家族みんなの思い出を、ここに集めましょう。</p>
       </section>
-      <section class="section">
-        <div class="gallery-empty">
-          <div class="icon">📷</div>
-          <h2 class="section-title">旅行後のお楽しみ</h2>
-          <p>いまはまだ空っぽ。旅行後に写真を追加すると下のギャラリーに表示されます。</p>
+      <section class="section" aria-labelledby="gallery-upload-title">
+        <div class="gallery-upload">
+          <h2 class="section-title" id="gallery-upload-title">思い出を追加</h2>
+          <p>スマートフォンやPCから写真を追加できます。</p>
+          <form id="gallery-upload-form">
+            <label for="gallery-file" class="gallery-file-label">写真を選択</label>
+            <input id="gallery-file" name="file" type="file" accept="image/*" required>
+            <p id="gallery-file-name" class="gallery-file-name">写真が選択されていません</p>
+            <button class="btn" type="submit" id="gallery-upload-button">写真を追加</button>
+          </form>
+          <p id="gallery-upload-status" class="gallery-status" role="status" aria-live="polite"></p>
         </div>
-        <!-- 旅行後は下記コメントを参考に <figure> をコピーして写真を追加してください。
-<div class="gallery-grid">
-  <figure class="gallery-item"><img src="images/gallery/photo-01.jpg" alt="家族旅行の思い出写真1"></figure>
-  <figure class="gallery-item"><img src="images/gallery/photo-02.jpg" alt="家族旅行の思い出写真2"></figure>
-</div>
--->
+        <div id="gallery-list-status" class="gallery-status" role="status" aria-live="polite">写真を読み込んでいます...</div>
+        <div id="gallery-empty" class="gallery-empty" hidden>
+          <div class="icon">📷</div>
+          <h2 class="section-title">最初の思い出を追加しよう</h2>
+          <p>写真を追加すると、家族みんながここで見られます。</p>
+        </div>
+        <div id="gallery-grid" class="gallery-grid" aria-label="思い出写真" hidden></div>
       </section>
     </div>
   </main>
@@ -58,6 +65,7 @@
     </div>
   </footer>
   <script src="js/main.js"></script>
+  <script src="js/gallery.js"></script>
 </body>
 
 </html>
