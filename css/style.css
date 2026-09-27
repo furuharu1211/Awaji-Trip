@@ -751,44 +751,86 @@ main:not(.home-main) {
 
 /* 思い出写真のアップロード */
 .gallery-upload {
+  width: 100%;
   padding: 24px;
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: var(--radius-lg);
+  box-shadow: 0 14px 34px rgba(76, 62, 50, .06);
 }
 
-.gallery-upload .section-title { font-size: 1.6rem; }
-.gallery-upload p { margin: 8px 0 18px; color: var(--muted); }
-.gallery-upload form { display: grid; gap: 12px; }
-.gallery-file-label { font-weight: 800; }
+.gallery-upload .section-title {
+  font-size: 1.6rem;
+  line-height: 1.4;
+}
+
+.gallery-upload > p {
+  margin: 8px 0 20px;
+  color: var(--muted);
+  font-size: .95rem;
+}
+
+.gallery-upload form { display: grid; gap: 10px; }
+
+.gallery-file-label {
+  font-weight: 800;
+  font-size: .92rem;
+}
+
 .gallery-upload input[type="file"] {
+  display: block;
   width: 100%;
   min-width: 0;
-  padding: 12px;
+  padding: 10px;
   border: 1px solid var(--border);
   border-radius: var(--radius-sm);
   background: var(--bg);
-  font-size: .9rem;
+  font-size: .82rem;
 }
+
 .gallery-upload input[type="file"]::file-selector-button {
   margin-right: 10px;
-  padding: 9px 12px;
-  border: 0;
+  padding: 10px 14px;
+  border: 1px solid var(--accent);
   border-radius: 999px;
-  background: var(--surface-2);
+  background: var(--surface);
   color: var(--accent-dark);
+  font-size: .9rem;
   font-weight: 800;
   cursor: pointer;
 }
-.gallery-upload .gallery-file-name {
-  margin: 0;
-  overflow-wrap: anywhere;
-  font-size: .85rem;
+
+.gallery-upload input[type="file"]:focus-visible,
+.gallery-upload button:focus-visible {
+  outline: 3px solid rgba(155,123,104,.25);
+  outline-offset: 2px;
 }
+
+.gallery-upload .gallery-file-name {
+  margin: 0 0 6px;
+  overflow-wrap: anywhere;
+  color: var(--muted);
+  font-size: .82rem;
+}
+
+.gallery-upload #gallery-upload-button {
+  display: flex;
+  width: 100%;
+  min-height: 50px;
+  margin: 0;
+  font-size: 1rem;
+}
+
 .gallery-status { margin: 16px 0; color: var(--muted); }
 .gallery-status.is-error { color: #a03f36; }
 .gallery-upload .gallery-status { margin-bottom: 0; }
 .gallery-grid[hidden], .gallery-empty[hidden] { display: none; }
+
+@media (max-width: 480px) {
+  .gallery-upload { padding: 20px; }
+  .gallery-grid { column-gap: 10px; }
+  .gallery-item { margin-bottom: 10px; }
+}
 
 /* Footer */
 .site-footer {
