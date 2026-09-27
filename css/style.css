@@ -1175,6 +1175,71 @@ body.gallery-modal-open {
   }
 }
 
+/* 写真の選択と削除 */
+.gallery-hint { margin: 26px 0 -14px; color: var(--muted); font-size: .85rem; }
+.gallery-item { position: relative; cursor: pointer; touch-action: pan-y; }
+.gallery-item.is-selected {
+  outline: 3px solid var(--accent-dark);
+  outline-offset: 2px;
+  border-radius: 14px;
+  opacity: .7;
+}
+.gallery-item.is-selected::after {
+  content: "✓";
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: var(--accent-dark);
+  color: #fff;
+  font-weight: 900;
+}
+.gallery-item:focus-visible { outline: 3px solid var(--accent-dark); border-radius: 14px; }
+.gallery-selection-actions {
+  position: sticky;
+  bottom: 12px;
+  z-index: 30;
+  display: grid;
+  gap: 8px;
+  margin-top: 18px;
+  padding: 16px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--surface);
+  box-shadow: var(--shadow);
+}
+.gallery-selection-actions[hidden], .gallery-modal[hidden] { display: none; }
+.gallery-selection-actions .btn { width: 100%; }
+.gallery-selection-actions span { font-weight: 800; }
+.gallery-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 1100;
+  display: grid;
+  place-items: center;
+  padding: 20px;
+}
+.gallery-modal-backdrop { position: absolute; inset: 0; background: rgba(49,43,38,.55); }
+.gallery-modal-dialog {
+  position: relative;
+  width: min(100%, 390px);
+  padding: 26px;
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  box-shadow: var(--shadow);
+}
+.gallery-modal-dialog h2 { margin: 0 0 8px; font-size: 1.4rem; }
+.gallery-modal-dialog p { margin: 0 0 20px; }
+.gallery-modal-actions { display: grid; gap: 10px; }
+.gallery-modal-actions .btn { width: 100%; cursor: pointer; }
+.gallery-delete-danger { background: #a4473c; border-color: #a4473c; }
+.gallery-modal-dialog .gallery-status { margin: 12px 0 0; }
+.gallery-upload #gallery-upload-button { width: 100%; }
+.gallery-upload .gallery-file-name { font-size: .85rem; }
 /* Footer */
 .site-footer {
   margin-top: 80px;
