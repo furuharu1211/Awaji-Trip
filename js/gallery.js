@@ -1,5 +1,5 @@
 // Cloudflare Workers の公開URLをここに設定します（末尾の / は不要）。
-const PHOTO_API_BASE = '';
+const PHOTO_API_BASE = 'https://awaji-photo-api.nagoharu2024.workers.dev';
 
 const uploadForm = document.querySelector('#gallery-upload-form');
 const fileInput = document.querySelector('#gallery-file');
