@@ -141,7 +141,7 @@ async function loadPhotos() {
 
 async function compressIfNeeded(file) {
   if (file.size <= MAX_IMAGE_BYTES) return file;
-  if (!['image/jpeg', 'image/png', 'image/webp'].includes(file.type)) {
+  if (!['image/jpeg', 'image/png', 'image/webp', 'image/heic', 'image/heif'].includes(file.type)) {
     throw new Error('この形式の大きな画像は圧縮できません。20MB以下の画像を選んでください。');
   }
   const objectUrl = URL.createObjectURL(file);
@@ -149,7 +149,9 @@ async function compressIfNeeded(file) {
     const image = new Image();
     image.src = objectUrl;
     await image.decode();
-    let scale = 1;
+    const outputType = ['image/heic', 'image/heif'].includes(file.type) ? 'image/jpeg' : file.type;
+    const outputName = outputType === file.type ? file.name : file.name.replace(/\.[^.]+$/, '') + '.jpg';
+    let scale = Math.min(1, 6000 / Math.max(image.naturalWidth, image.naturalHeight));
     for (let attempt = 0; attempt < 8; attempt++) {
       const canvas = document.createElement('canvas');
       canvas.width = Math.max(1, Math.floor(image.naturalWidth * scale));
@@ -157,11 +159,11 @@ async function compressIfNeeded(file) {
       const context = canvas.getContext('2d');
       if (!context) throw new Error('画像を圧縮できませんでした。');
       context.drawImage(image, 0, 0, canvas.width, canvas.height);
-      const quality = file.type === 'image/png' ? undefined : Math.max(.72, .92 - attempt * .025);
-      const blob = await new Promise(resolve => canvas.toBlob(resolve, file.type, quality));
+      const quality = outputType === 'image/png' ? undefined : Math.max(.72, .92 - attempt * .025);
+      const blob = await new Promise(resolve => canvas.toBlob(resolve, outputType, quality));
       canvas.width = canvas.height = 0;
       if (blob && blob.size <= MAX_IMAGE_BYTES) {
-        return new File([blob], file.name, { type: file.type, lastModified: file.lastModified });
+        return new File([blob], outputName, { type: outputType, lastModified: file.lastModified });
       }
       scale *= .82;
     }
